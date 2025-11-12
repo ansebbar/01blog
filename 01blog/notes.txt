@@ -1,0 +1,4 @@
+application layers of spring boot
+ 1.controller (Request handler layer)
+ 2.service (Business layer)
+ 3.repositry/ Entity /DTO (Model layer)
