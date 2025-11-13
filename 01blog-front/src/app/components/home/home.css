@@ -1,0 +1,18 @@
+/* Optional: Add custom home styles */
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-body h5 {
+  color: #495057;
+}
+
+.btn{
+  color: #5b7aa8;
+}
+
+.btn-outline{
+  border-color: #5b7aa8;
+  stroke-width: 0%.5;
+}

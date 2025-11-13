@@ -1,0 +1,9 @@
+.main-content {
+  min-height: calc(100vh - 56px); /* Adjust based on your navbar height */
+  padding: 20px 0;
+}
+
+/* Optional: Add some basic styling */
+body {
+  background-color: #f8f9fa;
+}

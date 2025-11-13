@@ -1,0 +1,51 @@
+
+@if(isLoggedIn) {
+
+
+}@else {
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-15">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="display-6 fst-italic">Welcome to Your <p class="text-primary">01Blog Platform</p>your step is to </h2>
+          <button class="btn btn-outline w-50" (click)="register()">Sign Up</button>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-success">
+            <h4 class="text-muted text-center">To have all of this features 👋</h4>
+            <!-- <p class="mb-0">You have successfully logged in to your blog application.</p> -->
+          </div>
+          
+          <div class="row mt-4">
+            <div class="col-md-4">
+              <div class="card text-center">
+                <div class="card-body">
+                  <h5>📝 Create Posts</h5>
+                  <p class="text-end">Share your thoughts with the world and followers</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-center">
+                <div class="card-body">
+                  <h5>💬 Make Comment</h5>
+                  <p class="text-center">To Engage with other users Posts</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-center">
+                <div class="card-body">
+                  <h5 class="text-primary">❤️ Like & Share</h5>
+                  <p class="text-start fw-bold">Interact with Posts you enjoy and like</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}

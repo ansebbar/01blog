@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">Login to Your Account</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+          
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" 
+                     [(ngModel)]="loginRequest.username" name="username" 
+                     required #username="ngModel">
+              <div *ngIf="username.invalid && username.touched" class="text-danger">
+                Username is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" 
+                     [(ngModel)]="loginRequest.password" name="password" 
+                     required #password="ngModel">
+              <div *ngIf="password.invalid && password.touched" class="text-danger">
+                Password is required
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100" 
+                    [disabled]="loginForm.invalid || isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isLoading ? 'Logging in...' : 'Login' }}
+            </button>
+          </form>
+          
+          <div class="text-center mt-3">
+            <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
