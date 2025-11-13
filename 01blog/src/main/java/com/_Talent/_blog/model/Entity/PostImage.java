@@ -19,14 +19,13 @@ public class PostImage {
     private String imageUrl;
     
     @Column(name = "image_order")
-    private Integer order; // To maintain image sequence
+    private Integer order; 
     
     private String caption;
     
     @Column(name = "alt_text")
     private String altText;
     
-    // Many-to-One: Many images can belong to one Post
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
@@ -37,5 +36,12 @@ public class PostImage {
         this.order = order;
         this.post = post;
     }
+    public void addImageToPost(Post post) {
+        this.post = post;
+        if (!post.getImages().contains(this)) {
+            post.getImages().add(this);
+        }
+    }
+    
     
 }

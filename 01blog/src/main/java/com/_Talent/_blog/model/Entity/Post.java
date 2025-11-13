@@ -26,7 +26,7 @@ public class Post {
     private String content;
     
     @Column(name = "featured_image_url")
-    private String featuredImageUrl; // Main thumbnail image
+    private String featuredImageUrl; 
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -34,21 +34,17 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    // Many-to-One: Many Posts can be created by one User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
     
-    // One-to-Many: One Post can have many Images
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("order ASC") // Order images by their sequence
+    @OrderBy("order ASC") 
     private List<PostImage> images = new ArrayList<>();
     
-    // One-to-Many: One Post can have many Comments
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
     
-    // One-to-Many: One Post can have many Likes
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PostLike> likes = new ArrayList<>();
     
@@ -69,6 +65,21 @@ public class Post {
         images.add(image);
         image.setPost(this);
     }
+
+    public void addImages(List<PostImage> images) {
+        for (PostImage image : images) {
+            addImage(image);
+        }
+    }
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+    public void addLike(PostLike like) {
+        likes.add(like);
+        like.setPost(this);
+    }
+    
     
     public void removeImage(PostImage image) {
         images.remove(image);

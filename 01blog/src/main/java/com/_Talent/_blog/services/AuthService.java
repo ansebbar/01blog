@@ -7,6 +7,8 @@ import com._Talent._blog.dto.RegisterRequest;
 import com._Talent._blog.model.Entity.User;
 import com._Talent._blog.repositery.UserRepository;
 import com._Talent._blog.config.JwtUtil;
+import com._Talent._blog.config.SecurityConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,18 +31,17 @@ public class AuthService {
     
     @Autowired
     private JwtUtil jwtUtil;
+
+
     
     public AuthResponse register(RegisterRequest registerRequest) {
-        // Check if user exists
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-        
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
         
-        // Create new user
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
@@ -50,8 +51,7 @@ public class AuthService {
         
         userRepository.save(user);
         
-        // Generate token
-        String token = jwtUtil.generateToken(user);
+        String token = jwtUtil.TkGenerate(user);
         return new AuthResponse(token, user.getUsername(), user.getEmail());
     }
     
@@ -66,7 +66,7 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
         User user = (User) authentication.getPrincipal();
-        String token = jwtUtil.generateToken(user);
+        String token = jwtUtil.TkGenerate(user);
         
         return new AuthResponse(token, user.getUsername(), user.getEmail());
     }

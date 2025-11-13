@@ -43,9 +43,9 @@ public class CommentLike {
     }
     
     
-    // public CommentLike(Comment comment, User user, LikeType type) {
-    //     this.comment = comment;
-    //     this.user = user;
-    //     this.type = type;
-    // }
+    public CommentLike(Comment comment, User user, LikeType type) {
+        this.comment = comment;
+        this.user = user;
+        this.type = type;
+    }
 }

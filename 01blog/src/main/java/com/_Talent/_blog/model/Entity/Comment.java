@@ -28,26 +28,21 @@ public class Comment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    // Many-to-One: Many Comments can be on one Post
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
     
-    // Many-to-One: Many Comments can be written by one User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
-    // Self-referential: Comments can have replies (parent comment)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
     
-    // One-to-Many: One Comment can have many replies
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> replies = new ArrayList<>();
     
-    // One-to-Many: One Comment can have many Likes
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentLike> likes = new ArrayList<>();
     

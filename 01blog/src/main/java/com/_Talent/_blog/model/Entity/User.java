@@ -104,5 +104,37 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    public void addPost(Post post) {
+        posts.add(post);
+        post.setCreator(this);
+    }
+    public void removePost(Post post) {
+        posts.remove(post);
+        post.setCreator(null);
+    }
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setUser(this);
+    }
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setUser(null);
+    }
+    public void followUser(User userToFollow) {
+        Follow follow = new Follow(this, userToFollow);
+        following.add(follow);
+        userToFollow.getFollowers().add(follow);
+    }
+    public void unfollowUser(User userToUnfollow) {
+        following.removeIf(follow -> follow.getFollowing().equals(userToUnfollow));
+        userToUnfollow.getFollowers().removeIf(follow -> follow.getFollower().equals(this));
+    }
+    public boolean isFollowing(User user) {
+        return following.stream().anyMatch(follow -> follow.getFollowing().equals(user));
+    }
+    public boolean isFollowedBy(User user) {
+        return followers.stream().anyMatch(follow -> follow.getFollower().equals(user));
+    }
+    
 }
     

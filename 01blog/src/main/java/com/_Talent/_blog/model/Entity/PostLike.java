@@ -21,17 +21,15 @@ public class PostLike {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LikeType type; // LIKE or DISLIKE
+    private LikeType type; 
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
-    // Many-to-One: Many Likes can be on one Post
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
     
-    // Many-to-One: Many Likes can be from one User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -40,5 +38,15 @@ public class PostLike {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+    public PostLike(LikeType type, Post post, User user) {
+        this.type = type;
+        this.post = post;
+        this.user = user;
+    }
+    public enum LikeType {
+        LIKE,
+        DISLIKE
+    }
+    
     
 }

@@ -22,12 +22,10 @@ public class Follow {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
-    // Many-to-One: User who is following
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", nullable = false)
     private User follower;
     
-    // Many-to-One: User who is being followed
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id", nullable = false)
     private User following;
