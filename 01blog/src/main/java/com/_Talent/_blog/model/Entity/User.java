@@ -136,5 +136,6 @@ public class User implements UserDetails {
         return followers.stream().anyMatch(follow -> follow.getFollower().equals(user));
     }
     
+    
 }
     

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common'; // ← ADD THIS
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
+
+//after login, show username and logout button in navbar
 @Component({
   selector: 'app-navbar',
   standalone: true,

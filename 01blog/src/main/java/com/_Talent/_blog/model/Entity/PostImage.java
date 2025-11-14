@@ -21,7 +21,7 @@ public class PostImage {
     @Column(name = "image_order")
     private Integer order; 
     
-    private String caption;
+    private String caption;///// optional caption for the image
     
     @Column(name = "alt_text")
     private String altText;

@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { LoginRequest } from '../models/login-request';
 import { RegisterRequest } from '../models/register-request';
 import { AuthResponse } from '../models/auth-response';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,14 @@ export class AuthService {
         })
       );
   }
+
+  getUserInfo(username:String | null): Observable<User> {
+    if (!username) {
+      throw new Error('Username is required to fetch user info');
+    }
+    console.log('Fetching user info for username:', username);
+    return this.http.get<User>(`${this.apiUrl}/profile?username=${username}`,);
+  } 
   
   private saveToken(token: string): void {
     localStorage.setItem('authToken', token);
