@@ -12,3 +12,4 @@ public class GetPostsRequest {
     private int likes;
     private List<String> postLikesusers;
 }
+    //services and controllers

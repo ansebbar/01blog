@@ -17,25 +17,6 @@ export class ProfileService {
 
   ///hna rakkkkkkkk
   fetchUserProfile(): Observable<User> {
-    // this.authService.getUserInfo(this.authService.getUsername()).subscribe({
-    //   next: (response) => {
-    //     console.log('User profile response:', response);
-    //     this.user = {
-    //       id: response.id,
-    //       username: response.username,
-    //       email: response.email,
-    //       bio: response.bio,
-    //       avatarUrl: response.avatarUrl,
-    //       firstName: response.firstName,
-    //       lastName: response.lastName,
-    //       createdAt: response.createdAt,
-
-    //     };
-    //   },
-    //   error: (error) => {
-    //     console.error('Failed to fetch user profile:', error);
-    //   },
-    // });
     return this.http.get<User>(`${this.apiUrl}/profile?username=${this.authService.getUsername()}`);
 
 }

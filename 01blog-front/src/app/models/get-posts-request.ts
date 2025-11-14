@@ -12,3 +12,5 @@ export interface GetPostsRequest {
     likes: number;
     postLikesUsers: string[];
 }
+
+    //services and components

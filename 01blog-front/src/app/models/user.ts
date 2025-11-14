@@ -7,4 +7,6 @@ export interface User {
   createdAt: string;
   avatarUrl?: string;
   bio?: string;
+  followers: Map<string, string>;     //services 
+  following: Map<string, string>;
 }

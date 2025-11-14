@@ -6,3 +6,5 @@ export interface CreatePostRequest {
     creator: string;
     images: PostImageRequest[];
 }
+
+    //services and components
