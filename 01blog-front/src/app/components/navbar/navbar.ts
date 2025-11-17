@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+// import { LoginComponent } from '../login/login';
 
 
 //after login, show username and logout button in navbar
@@ -13,18 +14,29 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./navbar.css']
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn: boolean = false;
+  isLoggedInn: boolean = false;
   username: string | null = '';
+  log = inject(AuthService);
   
   constructor(private authService: AuthService) {}
   
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedInn = this.authService.isLoggedIn();
     this.username = this.authService.getUsername();
+  }
+
+  // updateLogin(login : boolean): void {
+  //   this.login.set(login);
+  //   this.isLoggedIn = this.authService.isLoggedIn();
+  //   this.username = this.authService.getUsername();
+  // }
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
   
   logout(): void {
     this.authService.logout();
     window.location.reload();
   }
+
 }

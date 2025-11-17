@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // ← ADD THIS
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/login-request';
+import { NavbarComponent } from '../navbar/navbar';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +15,13 @@ import { LoginRequest } from '../../models/login-request';
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
+
   loginRequest: LoginRequest = {
     username: '',
     password: ''
   };
   
+
   errorMessage: string = '';
   isLoading: boolean = false;
   
@@ -25,17 +29,23 @@ export class LoginComponent {
   
   onSubmit(): void {
     this.isLoading = true;
+    // this.log.set(true);
     this.errorMessage = '';
     
     this.authService.login(this.loginRequest).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.router.navigate(['/home']);
+        // this.navbarcom.ngOnInit();
+        // this.log.set(true);
+        // this.authService.
       },
       error: (error) => {
         this.isLoading = false;
         this.errorMessage = error.error?.message || 'Login failed. Please check your credentials.';
       }
     });
+      
+
   }
 }

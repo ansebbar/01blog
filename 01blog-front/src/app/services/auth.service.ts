@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -12,6 +12,16 @@ import { User } from '../models/user';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+
+    // private auth = signal(false);
+  //   private isAuthenticated = signal<boolean>(this.checkInitialAuthState());
+  // private currentUsername = signal<string | null>(this.getUsername());
+
+  // // Public computed signals for components to use
+  // readonly authState = computed(() => ({
+  //   isLoggedIn: this.isAuthenticated(),
+  //   username: this.currentUsername()
+  // }));
   
   constructor(private http: HttpClient) { }
   
@@ -21,6 +31,7 @@ export class AuthService {
         tap(response => {
           this.saveToken(response.token);
           this.saveUserInfo(response);
+          // this.setAuthState(true, response.username);
         })
       );
   }
@@ -31,9 +42,15 @@ export class AuthService {
         tap(response => {
           this.saveToken(response.token);
           this.saveUserInfo(response);
+          // this.setAuthState(true, response.username);
         })
       );
   }
+
+  // private setAuthState(isLoggedIn: boolean, username: string | null = null): void {
+  //   this.isAuthenticated.set(isLoggedIn);
+  //   this.currentUsername.set(username);
+  // }
 
   getUserInfo(username:String | null): Observable<User> {
     if (!username) {
@@ -45,6 +62,10 @@ export class AuthService {
   
   private saveToken(token: string): void {
     localStorage.setItem('authToken', token);
+  }
+
+  checkInitialAuthState(): boolean {
+    return !!this.getToken();
   }
   
   private saveUserInfo(authResponse: AuthResponse): void {
@@ -68,5 +89,6 @@ export class AuthService {
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
     localStorage.removeItem('email');
+    // this.auth.set(false);
   }
 }

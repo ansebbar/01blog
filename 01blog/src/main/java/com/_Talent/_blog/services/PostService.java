@@ -1,6 +1,8 @@
 package com._Talent._blog.services;
+import com._Talent._blog.dto.PostImageRequest;
 import com._Talent._blog.model.Entity.Comment;
 import com._Talent._blog.model.Entity.Post;
+import com._Talent._blog.model.Entity.PostImage;
 import com._Talent._blog.model.Entity.User;
 import com._Talent._blog.repositery.CommentRepository;
 import com._Talent._blog.repositery.PostRepository;
@@ -8,6 +10,8 @@ import com._Talent._blog.repositery.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +28,7 @@ public class PostService {
     private CommentRepository commentRepository;
     
     // CREATE a new post
-    public Post createPost(String title, String content, Long userId) {
+    public Post createPost(String title, String content, Long userId, List<PostImageRequest> images) {
         // 1. Find the user
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
@@ -34,6 +38,13 @@ public class PostService {
         post.setTitle(title);
         post.setContent(content);
         post.setCreator(user);
+        for (PostImageRequest imgReq : images) {
+            PostImage img = new PostImage();
+            img.setImageUrl(imgReq.getImageUrl());
+            img.setOrder(imgReq.getOrder());
+            img.setPost(post); // Set the back-reference
+            post.getImages().add(img);
+        }
         
         // 3. Connect post to user (both ways)
         user.addPost(post);

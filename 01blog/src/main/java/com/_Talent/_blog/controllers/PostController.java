@@ -22,7 +22,8 @@ public class PostController {
         Post post = postService.createPost(
             request.getTitle(), 
             request.getContent(), 
-            request.getUserId()
+            request.getCreator(),
+            request.getImages()
         );
         return ResponseEntity.ok(post);
     }
