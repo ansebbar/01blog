@@ -1,5 +1,38 @@
 
 @if(isLoggedIn) {
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center">Welcome back, {{ username }}!</h3>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-success">
+            <h4 class="text-muted">01Blog Search</h4>
+            <input type="text" class="form-control" placeholder="Search for posts..." (input)="onSearch()" />
+          </div>
+          <div *ngIf="posts.length > 0; else noPosts">
+            <div *ngFor="let post of posts" class="mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ post.title }}</h5>
+                  <p class="card-text">{{ post.content | slice:0:100 }}...</p>
+                  <a [routerLink]="['/posts', post.id]" class="btn btn-primary">Read More</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noPosts>
+            <div class="alert alert-info">
+              <p class="mb-0">No posts found.</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
 
 
 }@else {

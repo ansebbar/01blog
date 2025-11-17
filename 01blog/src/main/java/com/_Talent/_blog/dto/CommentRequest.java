@@ -1,6 +1,9 @@
 package com._Talent._blog.dto;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class CommentRequest {
     private String content;
     private String creator;

@@ -2,6 +2,7 @@ import { CommentRequest } from "./comment-request";
 import { PostImageRequest } from "./post-image-request";
 
 export interface GetPostsRequest {
+    id ?: number;
     title: string;
     content: string;
     creator: string;

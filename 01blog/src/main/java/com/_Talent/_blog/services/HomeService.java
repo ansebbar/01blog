@@ -11,7 +11,6 @@ public class HomeService {
 
     // @Autowired
     private final Model mod;
-    
 
     public HomeService(Model mod) {
         this.mod =mod;

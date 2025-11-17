@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,11 +29,9 @@ public class PostService {
     
     // CREATE a new post
     public Post createPost(String title, String content, Long userId, List<PostImageRequest> images) {
-        // 1. Find the user
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
-        // 2. Create the post
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
@@ -46,10 +44,8 @@ public class PostService {
             post.getImages().add(img);
         }
         
-        // 3. Connect post to user (both ways)
         user.addPost(post);
         
-        // 4. Save (cascade will handle everything)
         return postRepository.save(post);
     }
     

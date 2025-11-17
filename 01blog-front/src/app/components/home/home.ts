@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, NgModule, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { PostRequest } from '../../models/post-request';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +14,24 @@ import { Router, RouterModule } from '@angular/router';
 export class HomeComponent implements OnInit {
   username: string | null = '';
   isLoggedIn: boolean = false;
+  posts: PostRequest[] = [];
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.username = this.authService.getUsername();
   }
+
+  
+
+
+  //todo
+  //////backend search algo needs to be implemented
+  onSearch(): void {
+    this.router.navigate(['/posts?search={}', input]);
+  }
+  getAllPosts(): void {}
+    
   
   logout(): void {
     this.authService.logout();
