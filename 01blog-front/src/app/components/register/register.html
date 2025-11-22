@@ -3,52 +3,25 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h3 class="text-center">Create Account</h3>
+          <h3 class="text-center">Registration With 01BlOg</h3>
         </div>
         <div class="card-body">
-          <div *ngIf="errorMessage" class="alert alert-danger">
+          @if(errorMessage){
+          <div class="alert alert-danger">
             {{ errorMessage }}
           </div>
-          
+          }
           <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" 
-                     [(ngModel)]="registerRequest.email" name="email" 
-                     required email #email="ngModel">
-              <div *ngIf="email.invalid && email.touched" class="text-danger">
-                Valid email is required
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" 
-                     [(ngModel)]="registerRequest.username" name="username" 
-                     required minlength="3" #username="ngModel">
-              <div *ngIf="username.invalid && username.touched" class="text-danger">
-                Username must be at least 3 characters
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" 
-                     [(ngModel)]="registerRequest.password" name="password" 
-                     required minlength="6" #password="ngModel">
-              <div *ngIf="password.invalid && password.touched" class="text-danger">
-                Password must be at least 6 characters
-              </div>
-            </div>
-            
             <div class="mb-3">
               <label for="firstName" class="form-label">First Name</label>
               <input type="text" class="form-control" id="firstName" 
                      [(ngModel)]="registerRequest.firstName" name="firstName" 
                      required #firstName="ngModel">
-              <div *ngIf="firstName.invalid && firstName.touched" class="text-danger">
+              @if(firstName.invalid && firstName.touched){
+              <div class="text-danger">
                 First name is required
               </div>
+            }
             </div>
             
             <div class="mb-3">
@@ -56,14 +29,79 @@
               <input type="text" class="form-control" id="lastName" 
                      [(ngModel)]="registerRequest.lastName" name="lastName" 
                      required #lastName="ngModel">
-              <div *ngIf="lastName.invalid && lastName.touched" class="text-danger">
+              @if(lastName.invalid && lastName.touched){
+              <div class="text-danger">
                 Last name is required
               </div>
+            }
             </div>
-            
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" 
+                     [(ngModel)]="registerRequest.email" name="email" 
+                     required email #email="ngModel">
+              @if(email.invalid && email.touched){
+              <div class="text-danger">
+                Valid email is required
+              </div>
+              }
+            </div>
+            <div class="mb-3">
+              <label for="dateOfBirth" class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="dateOfBirth" 
+                     [(ngModel)]="registerRequest.dateOfBirth" name="dateOfBirth"
+                      [defaultValue]="" #dateOfBirth="ngModel">
+            </div>
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" 
+                     [(ngModel)]="registerRequest.username" name="username" 
+                     required minlength="3" #username="ngModel">
+            @if(username.invalid && username.touched){
+              <div class="text-danger">
+                Username must be at least 3 characters
+              </div>
+            }
+            </div>
+            <div class="mb-3">
+              <label for="display_name" class="form-label">Display Name</label>
+              <input type="text" class="form-control" id="display_name" 
+                     [(ngModel)]="registerRequest.display_name" name="display_name" 
+                     required minlength="3" #display_name="ngModel">
+            @if(display_name.invalid && display_name.touched){
+              <div class="text-danger">
+                Display Name must be at least 3 characters
+              </div>
+            }
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" 
+                     [(ngModel)]="registerRequest.password" name="password" 
+                     required minlength="6" #password="ngModel">
+              @if(password.invalid && password.touched){
+              <div class="text-danger">
+                Password must be at least 6 characters
+              </div>
+            }
+            </div>
+            <div class="mb-3">
+              <label for="avatarUpload" class="form-label">Upload Avatar</label>
+              <input type="file" class="form-control" id="avatarUpload" 
+                     (change)="onFileSelected($event)" accept="image/*" name="avatarUpload">
+              <small class="form-text text-muted">Select an image file for your avatar</small>
+            </div>
+            <div class="mb-3">
+              <label for="bio" class="form-label">Bio(about you)</label>
+              <textarea class="form-control" id="bio" rows="3"
+                        [(ngModel)]="registerRequest.bio" name="bio"
+                        [defaultValue]="" #bio="ngModel"></textarea>
+            </div>
             <button type="submit" class="btn btn-primary w-100" 
                     [disabled]="registerForm.invalid || isLoading">
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              @if(isLoading){
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              }
               {{ isLoading ? 'Creating Account...' : 'Register' }}
             </button>
           </form>

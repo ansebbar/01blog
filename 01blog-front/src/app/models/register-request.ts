@@ -4,6 +4,10 @@ export interface RegisterRequest {
   password: string;
   firstName: string;
   lastName: string;
+  display_name: string;
+  avatarUrl?: string;
+  bio?: string;
+  dateOfBirth?: string;
 }
 
 //services

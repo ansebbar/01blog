@@ -42,12 +42,4 @@ export class ProfileComponent {
     console.log('Updated user profile:', this.user);
     this.isEditing = false;
   }
-
-  viewFollowers(): void {
-    // Implement view followers logic
-  }
-
-  viewFollowing(): void {
-    // Implement view following logic
-  }
 }

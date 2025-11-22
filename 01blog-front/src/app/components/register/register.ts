@@ -18,7 +18,11 @@ export class RegisterComponent {
     username: '',
     password: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    display_name: '',
+    avatarUrl: '',
+    bio: '',
+    dateOfBirth: ''
   };
   
   errorMessage: string = '';
@@ -40,5 +44,16 @@ export class RegisterComponent {
         this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
       }
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.registerRequest.avatarUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }

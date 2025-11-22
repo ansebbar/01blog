@@ -6,19 +6,23 @@
           <h3 class="text-center">Login to Your Account</h3>
         </div>
         <div class="card-body">
-          <div *ngIf="errorMessage" class="alert alert-danger">
+          @if(errorMessage){
+          <div class="alert alert-danger">
             {{ errorMessage }}
           </div>
+          }
           
           <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
             <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
+              <label for="username" class="form-label">Username or Email Address</label>
               <input type="text" class="form-control" id="username" 
                      [(ngModel)]="loginRequest.username" name="username" 
                      required #username="ngModel">
-              <div *ngIf="username.invalid && username.touched" class="text-danger">
+              @if(username.invalid && username.touched){
+              <div class="text-danger">
                 Username is required
               </div>
+            }
             </div>
             
             <div class="mb-3">
@@ -26,14 +30,26 @@
               <input type="password" class="form-control" id="password" 
                      [(ngModel)]="loginRequest.password" name="password" 
                      required #password="ngModel">
-              <div *ngIf="password.invalid && password.touched" class="text-danger">
+              @if(password.invalid && password.touched){
+              <div class="text-danger">
                 Password is required
               </div>
+            }
             </div>
+            <div class="mb-3">
+              <a href="#" class="float-end">Forgot Password?</a>
+            </div>
+            <!-- <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="rememberMe" 
+                     [(ngModel)]="loginRequest.rememberMe" name="rememberMe">
+              <label class="form-check-label" for="rememberMe">Remember Me</label>
+            </div> -->
             
             <button type="submit" class="btn btn-primary w-100" 
                     [disabled]="loginForm.invalid || isLoading">
-              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              @if(isLoading){
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              }
               {{ isLoading ? 'Logging in...' : 'Login' }}
             </button>
           </form>
