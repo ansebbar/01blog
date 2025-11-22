@@ -69,10 +69,47 @@
       <div class="card-body">
         @if(!isEditing) {
         <div>
+          <img [src]="user.avatarUrl || 'assets/default-profile.png'" 
+               alt="Profile Picture" class="img-thumbnail mb-3" width="150">
+          <button class="btn btn-secondary mb-3" (click)="toggleFollowers()">
+            followers ({{ user.followersCount }})
+          </button>
+          <button class="btn btn-secondary mb-3" (click)="toggleFollowing()">
+            following ({{ user.followingCount }})
+          </button>
           <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Username:</strong> {{ user.username }}</p>
+
+
         </div>
+
+        @if(followers && user.followers){
+          <div>
+            <h4>Followers List</h4>
+            @if(user.followers.size === 0){
+              <p>No followers to display.</p>
+            }
+            <ul>
+              @for(foller of user.followers; track user.followers.values()){
+                <li>{{ foller }}</li>
+              }
+            </ul>
+          </div>
+        }
+        @if(following && user.following){
+          <div>
+            <h4>Following List</h4>
+            @if(user.following.size === 0){
+              <p>No following to display.</p>
+            }
+            <ul>
+              @for(folling of user.following; track user.following.values()){
+                <li>{{ folling }}</li>
+              }
+            </ul>
+          </div>
+        }
     }
         @if(isEditing){
         <form (ngSubmit)="onSubmit()">
@@ -90,6 +127,40 @@
                    name="lastName"
                    [value]="user.lastName || ''">
           </div>
+          <div class="mb-3">
+            <label class="form-label">Bio</label>
+            <textarea class="form-control" rows="3"
+                      [(ngModel)]="user.bio" 
+                      name="bio">{{ user.bio || '' }}</textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Avatar URL</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="user.avatarUrl" 
+                   name="avatarUrl"
+                   [value]="user.avatarUrl || ''">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" 
+                   [(ngModel)]="user.email" 
+                   name="email"
+                   [value]="user.email || ''">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" 
+                   [(ngModel)]="user.username" 
+                   name="username"
+                   [value]="user.username || ''">
+          </div>
+          <!-- <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" 
+                   [(ngModel)]="user.password" 
+                   name="password"
+                   [value]="user.password || ''">
+          </div> -->
           <button type="submit" class="btn btn-success">Save Changes</button>
         </form>
     }

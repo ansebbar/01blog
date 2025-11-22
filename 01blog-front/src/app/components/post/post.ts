@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './post.css',
 })
 export class Post {
-
+ //todo implement post component
 
   // constructor()
 

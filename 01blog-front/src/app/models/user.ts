@@ -9,4 +9,6 @@ export interface User {
   bio?: string;
   followers: Map<string, string>;     //services 
   following: Map<string, string>;
+  followersCount: number;
+  followingCount: number;
 }

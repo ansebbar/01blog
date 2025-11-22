@@ -15,6 +15,8 @@ export class ProfileComponent {
   isEditing: boolean = false;
   isLoading: boolean = true;
   user: User | null = null;
+  followers: boolean = false;
+  following: boolean = false;
   constructor(private profileservice:ProfileService){}
 
   ngOnInit(): void {
@@ -28,10 +30,24 @@ export class ProfileComponent {
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
   }
+  toggleFollowers(): void {
+    this.followers = !this.followers;
+  }
+  toggleFollowing(): void {
+    this.following = !this.following;
+  }
 
   onSubmit(): void {
     this.profileservice.updateUserProfile(this.user!);
     console.log('Updated user profile:', this.user);
     this.isEditing = false;
+  }
+
+  viewFollowers(): void {
+    // Implement view followers logic
+  }
+
+  viewFollowing(): void {
+    // Implement view following logic
   }
 }
