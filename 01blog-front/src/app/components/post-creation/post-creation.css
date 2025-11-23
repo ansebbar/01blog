@@ -1,0 +1,46 @@
+/* post-create.component.css */
+.rich-text-toolbar {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem 0.375rem 0 0;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.media-preview-card {
+  position: relative;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.media-preview-card img,
+.media-preview-card video {
+  max-height: 150px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 3.6.4.4.4-.4'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Drag and drop styling */
+.drop-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 0.375rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.drop-zone:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}

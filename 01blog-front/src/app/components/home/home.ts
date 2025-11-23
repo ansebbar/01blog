@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { PostRequest } from '../../models/post-request';
+import { PostService } from '../../services/post-service';
+import { GetPostsRequest } from '../../models/get-posts-request';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +16,15 @@ import { PostRequest } from '../../models/post-request';
 export class HomeComponent implements OnInit {
   username: string | null = '';
   isLoggedIn: boolean = false;
-  posts: PostRequest[] = [];
-  constructor(private authService: AuthService, private router: Router) {}
+  posts: GetPostsRequest[] = [];
+  constructor(private authService: AuthService, private router: Router, private postService: PostService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.username = this.authService.getUsername();
+    this.postService.getAllPosts().subscribe(posts => {
+      this.posts = posts;
+    });
   }
 
   

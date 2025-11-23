@@ -3,5 +3,3 @@ export interface PostImageRequest {
     order: number;
     alt: string;
 }
-
-    //services and components

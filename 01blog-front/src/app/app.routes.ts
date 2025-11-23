@@ -4,11 +4,12 @@ import { RegisterComponent } from './components/register/register';
 import { HomeComponent } from './components/home/home';
 import { AuthGuard } from './guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile';
+import { PostCreateComponent } from './components/post-creation/post-creation';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-
+  { path: 'post-creation', component: PostCreateComponent, canActivate: [AuthGuard] },
   
   { path: 'home', component: HomeComponent, /*canActivate: [AuthGuard]*/ },
   { path: 'profile', component:ProfileComponent , canActivate: [AuthGuard] },

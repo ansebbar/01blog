@@ -34,13 +34,20 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
     
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+    @Column(name = "bio", length = 1000)
     private String bio;
+    @Column(name = "profile_picture")
     private String profilePicture;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "date_of_birth")
+    private LocalDateTime dateOfBirth;
     
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
