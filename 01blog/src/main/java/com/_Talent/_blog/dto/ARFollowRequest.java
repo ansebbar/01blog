@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ARFollowRequest {
     private Long followerId;
-    private Long followeeId;
+    private Long followedId;
     private boolean addOrRemove;
 }

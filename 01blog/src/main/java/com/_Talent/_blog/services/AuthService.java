@@ -7,7 +7,7 @@ import com._Talent._blog.dto.RegisterRequest;
 import com._Talent._blog.model.Entity.User;
 import com._Talent._blog.repositery.UserRepository;
 import com._Talent._blog.config.JwtUtil;
-import com._Talent._blog.config.SecurityConfig;
+// import com._Talent._blog.config.SecurityConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

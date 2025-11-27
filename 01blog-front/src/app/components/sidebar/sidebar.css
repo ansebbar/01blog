@@ -1,0 +1,95 @@
+/* :host {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #2c3e50;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #34495e;
+  text-align: center;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  color: #ecf0f1;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  border-bottom: 1px solid #34495e;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav a:hover {
+  background: #34495e;
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-nav a.active {
+  background: #3498db;
+  color: white;
+  border-left: 4px solid #2980b9;
+}
+
+.sidebar-nav .icon {
+  margin-right: 10px;
+  font-style: normal;
+}
+
+.logout-link {
+  cursor: pointer;
+  color: #e74c3c !important;
+}
+
+.logout-link:hover {
+  background: #c0392b !important;
+  color: white !important;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #ecf0f1;
+  overflow-y: auto;
+}
+
+Collapsible sidebar */
+/* .sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed .sidebar-header h3,
+.sidebar.collapsed .sidebar-nav span {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-nav a {
+  justify-content: center;
+  padding: 15px 10px;
+}
+
+.sidebar.collapsed .sidebar-nav .icon {
+  margin-right: 0;
+  font-size: 1.2em;
+} */

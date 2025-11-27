@@ -1,11 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+// import { Sidebar } from '../sidebar/sidebar';
+import { SidebarService} from '../../services/sidebar.service';
 // import { LoginComponent } from '../login/login';
 
 
-//after login, show username and logout button in navbar
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -15,13 +16,18 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   isLoggedInn: boolean = false;
-  username: string | null = '';
-  log = inject(AuthService);
-  
-  constructor(private authService: AuthService) {}
-  
+  username: string | null = null;
+  profileImageUrl: string = ''; // Default profile image path
+  // log = inject(AuthService);
+  //  @ViewChild(Sidebar) sidebarComponent!: Sidebar;
+  private authService = inject(AuthService);
+  private sidebarService = inject(SidebarService);  
   ngOnInit(): void {
-    this.isLoggedInn = this.authService.isLoggedIn();
+    // this.isLoggedInn = this.authService.isLoggedIn();
+    this.isLoggedIn();
+    if (this.isLoggedInn) {
+      this.profileImageUrl = this.authService.getProfileImageUrl() || "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg";
+    }
     this.username = this.authService.getUsername();
   }
 
@@ -32,12 +38,15 @@ export class NavbarComponent implements OnInit {
   // }
   isLoggedIn(): boolean {
     this.username = this.authService.getUsername();
-    return this.authService.isLoggedIn();
+    this.isLoggedInn = this.authService.isLoggedIn();
+    return this.isLoggedInn;
   }
   
   logout(): void {
     this.authService.logout();
     window.location.reload();
   }
-
+  onProfileClick(): void {
+    this.sidebarService.toggleSidebar();
+  }
 }

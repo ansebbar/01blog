@@ -14,6 +14,7 @@
         <span class="navbar-text me-3">Welcome, {{ username }}</span>
         <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
         <button class="btn btn-outline-light btn-sm ms-2" routerLink="/profile">Profile</button>
+        <img [src]="profileImageUrl" alt="Profile Image" class="rounded-circle ms-2" width="40" height="40" (click)="onProfileClick()">
       </div>
     }
     </div>

@@ -20,7 +20,7 @@ public class Register {
     private RegistrationService Rsv;
 
     @PostMapping("submitnewUser")
-    public ResponseEntity<String> Registering(@RequestBody User newusr) {
+    public ResponseEntity<String[]> Registering(@RequestBody User newusr) {
         return ResponseEntity.ok(Rsv.setuser(newusr));
     }
 

@@ -24,16 +24,34 @@ public class RegistrationService {
         // this.usr = usrm;
     }
 
-    public String setuser(User ur) {
+    public String[] setuser(User ur) {
         System.out.println(ur);
         Optional<User> us = this.usrt.findByEmail(ur.getEmail());
         Optional<User> un = this.usrt.findByUsername(ur.getUsername());
         // this.usrt.findById(1);
+        
+        String[] responses = new String[10];
         if (us.isPresent())
-            return "email is already registred";
+            responses[0] = "email is already registred";
         if (un.isPresent())
-            return "username taken";
+            responses[1] = "username taken";
+        if (ur.getPassword().length() < 6)
+            responses[2] = "password must be at least 6 characters";
+        if (ur.getUsername().length() < 3)
+            responses[3] = "username must be at least 3 characters";
+        if (ur.getEmail().length() < 5 || !ur.getEmail().contains("@"))
+            responses[4] = "invalid email address";
+        if (ur.getFirstName().length() < 1)
+            responses[5] = "first name required";
+        if (ur.getLastName().length() < 1)
+            responses[6] = "last name required";
+        if (ur.getPassword().length() > 20)
+            responses[7] = "password must be less than 20 characters";
+        if (ur.getUsername().length() > 15)
+            responses[8] = "username must be less than 15 characters";
+        if (ur.getEmail().length() > 50)
+            responses[9] =  "email must be less than 50 characters";
         this.usrt.save(ur);
-        return "welcome";
+        return responses;
     }
 }

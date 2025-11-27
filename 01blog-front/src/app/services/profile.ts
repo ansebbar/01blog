@@ -23,12 +23,22 @@ export class ProfileService {
 
 updateUserProfile(updatedUser: User): void {
     this.http.put<User>(`${this.apiUrl}/api/updateuserinfo`, updatedUser).subscribe({
-      next: (response) => {
+      next: () => {
         // this.user = response;
-        console.log('User profile updated successfully:', response);
+        console.log('User profile updated successfully:');
       },
       error: (error) => {
         console.error('Failed to update user profile:', error);
+      },
+    });
+  }
+  changePassword(fpasswordRequest:any):void{
+    this.http.post(`${this.apiUrl}/auth/fpassword`,fpasswordRequest).subscribe({
+      next: () => {
+        alert('Password changed successfully:');
+      },
+      error: (error) => {
+        console.error('Failed to change password:', error);
       },
     });
   }

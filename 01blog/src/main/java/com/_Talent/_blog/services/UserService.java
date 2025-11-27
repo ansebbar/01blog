@@ -59,4 +59,20 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("Failed to update user profile", e);
         }
     }
+
+    public void updatePassword(String username,  String newPassword) throws RuntimeException {
+        try {
+            User existingUser = userRepository.findByUsername(username).get();
+            if (existingUser == null) {
+                existingUser = userRepository.findByEmail(username).get();
+                if (existingUser == null) {
+                    throw new RuntimeException("User not found with username or email: " + username);
+                }
+            }
+            existingUser.setPassword(newPassword);
+            userRepository.save(existingUser);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update user password", e);
+        }
+    }
 }

@@ -1,0 +1,35 @@
+<div class="sidebar" [class.open]="sidebarService.isOpen()">
+  <div class="sidebar-header">
+    <img [src]="profileImageUrl" alt="Profile Image" class="profile-image">
+    <h3>{{username}}</h3>
+    <button (click)="sidebarService.closeSidebar()" class="close-btn">×</button>
+  </div>
+  
+  <div class="sidebar-content">
+    <nav>
+      <ul>
+        <li>
+          <a routerLink="/profile" (click)="sidebarService.closeSidebar()">
+            👤 Profile
+          </a>
+        </li>
+        <li>
+          <a routerLink="/settings" (click)="sidebarService.closeSidebar()">
+            ⚙️ Settings
+          </a>
+        </li>
+        <li>
+          <a routerLink="/help" (click)="sidebarService.closeSidebar()">
+            ❓ Help
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="sidebar-backdrop" 
+     [class.visible]="sidebarService.isOpen()"
+     (click)="sidebarService.closeSidebar()">
+</div>

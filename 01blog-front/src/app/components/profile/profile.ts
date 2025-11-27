@@ -23,6 +23,9 @@ export class ProfileComponent {
     this.profileservice.fetchUserProfile().subscribe(user => {
       console.log('User profile fetched:', user);
       this.user = user;
+      if (!this.user.avatarUrl) {
+        this.user.avatarUrl = "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg";
+      }
     });
     this.isLoading = false;
   }

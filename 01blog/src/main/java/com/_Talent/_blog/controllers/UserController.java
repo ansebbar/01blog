@@ -39,13 +39,13 @@ public class UserController {
     }
 
     // POST create new user
-    @PostMapping
-    public String createUser(@RequestBody User user) {
-        // users.setId(nextId++);
-        System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiihiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    // @PostMapping
+    // public String createUser(@RequestBody User user) {
+    //     // users.setId(nextId++);
+    //     // System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiihiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
-        return nwuser.setuser(user);
-    }
+    //     return nwuser.setuser(user);
+    // }
 
     // PUT update user
     // @PutMapping("/{id}")
