@@ -1,31 +1,25 @@
-import { Injectable, signal } from '@angular/core';
-import { AuthService } from './auth.service';
+import { Injectable, signal, computed } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SidebarService {
-  public isOpen = signal(false);
-  private username: string | null = null;
-
-  constructor(private authService: AuthService) {
-    this.username = this.authService.getUsername();
-  }
+  private _isOpen = signal(false);
+  
+  public isOpen = computed(() => this._isOpen());
 
   toggleSidebar() {
-    this.isOpen.update(value => !value);
-    console.log('Sidebar toggled. Current state:', this.isOpen());
+    console.log('Toggle sidebar called, current state:', this._isOpen());
+    this._isOpen.update(value => !value);
   }
 
   openSidebar() {
-    this.isOpen.set(true);
+    console.log('Opening sidebar');
+    this._isOpen.set(true);
   }
 
   closeSidebar() {
-    this.isOpen.set(false);
-  }
-
-  getSidebarState() {
-    return this.isOpen.asReadonly();
+    console.log('Closing sidebar');
+    this._isOpen.set(false);
   }
 }
