@@ -23,6 +23,16 @@
             ❓ Help
           </a>
         </li>
+        <li>
+          <a (click)="logout()" (click)="sidebarService.closeSidebar()">
+            🚪 Logout
+          </a>
+        </li>
+        <li>
+          <a routerLink="" (click)="sidebarService.closeSidebar()">
+            contact us
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

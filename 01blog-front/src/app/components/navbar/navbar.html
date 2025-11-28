@@ -1,9 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">01Blog</a>
+    <!-- <img src="./SmallSquareLogoJpg(1)-Photoroom.png" alt="01blog" class="navbar-logo"> -->
+    <!-- <a class="navbar-brand" routerLink="/">01Blog</a> -->
     
     <div class="navbar-nav ms-auto">
-      <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
       @if(!isLoggedIn()) {
       <div class="d-flex">
         <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
@@ -11,8 +11,9 @@
       </div>
     }@else{
       <div class="d-flex align-items-center">
-        <span class="navbar-text me-3">Welcome, {{ username }}</span>
-        <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+        <span class="navbar-text me-3 text-white">Welcome, {{ username }}</span>
+        <button class="btn btn-outline-light btn-sm" routerLink="/" routerLinkActive="active">Home</button>
+        <button class="btn btn-outline-light btn-sm ms-2" (click)="logout()">Logout</button>
         <button class="btn btn-outline-light btn-sm ms-2" routerLink="/profile">Profile</button>
         <img [src]="profileImageUrl" alt="Profile Image" class="rounded-circle ms-2" width="40" height="40" (click)="onProfileClick()">
       </div>

@@ -4,5 +4,13 @@
 
 
 .navbar {
-  background-color: #457b9d;
+  background-color: #70767a;
+  color: white;
+  height: 160px;
+}
+
+.navbar-nav {
+  display: static;
+  /* align-items: center; */
+  top: 100px;
 }
