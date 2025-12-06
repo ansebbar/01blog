@@ -17,7 +17,7 @@ import { SidebarService} from '../../services/sidebar.service';
 export class NavbarComponent implements OnInit {
   isLoggedInn: boolean = false;
   username: string | null = null;
-  profileImageUrl: string = ''; // Default profile image path
+  profileImageUrl: string | null = null; // Default profile image path
   // log = inject(AuthService);
   //  @ViewChild(Sidebar) sidebarComponent!: Sidebar;
   private authService = inject(AuthService);
@@ -26,7 +26,9 @@ export class NavbarComponent implements OnInit {
     // this.isLoggedInn = this.authService.isLoggedIn();
     this.isLoggedIn();
     if (this.isLoggedInn) {
-      this.profileImageUrl = this.authService.getProfileImageUrl() || "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg";
+      this.profileImageUrl = this.authService.getProfileImageUrl();
+      if (!this.profileImageUrl)
+        this.profileImageUrl =  "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg";
     }
     this.username = this.authService.getUsername();
   }
