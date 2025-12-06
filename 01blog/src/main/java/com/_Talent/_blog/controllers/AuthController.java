@@ -24,6 +24,9 @@ public class AuthController {
     @Autowired
     private ProfileService profileService;
     
+    
+
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
         AuthResponse response = authService.register(registerRequest);
