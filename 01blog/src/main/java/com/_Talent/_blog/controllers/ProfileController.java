@@ -92,15 +92,14 @@ public class ProfileController {
     public UserinfoRequest updateUserProfile(@RequestBody UserinfoRequest updatedUser) {
         System.out.println("Received update for user: " + updatedUser.getUsername());
         try {
-            // Verify the user is updating their own profile
             String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
             User currUser = userRepository.getUserByUsername(currentUsername).get();
 
-            if (currUser.getEmail().equals(updatedUser.getEmail()) == false){
-                if (userRepository.existsByEmail(updatedUser.getEmail())) {
-                    throw new RuntimeException("this email is already taken");
-                }
-            }
+            // if (currUser.getEmail().equals(updatedUser.getEmail()) == false){
+            //     if (userRepository.existsByEmail(updatedUser.getEmail())) {
+            //         throw new RuntimeException("this email is already taken");
+            //     }
+            // }
             userService.updateUserProfile(updatedUser, currentUsername);
             UserinfoRequest rtn = userService.getUserByUsername(currentUsername);
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {

@@ -1,48 +1,4 @@
-// import { Component } from '@angular/core';
-// import { User } from '../../models/user';
-// import { ProfileService } from '../../services/profile';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
-// import { RouterModule } from '@angular/router';
 
-// @Component({
-//   selector: 'app-profile',
-//   imports: [CommonModule, FormsModule, RouterModule],
-//   templateUrl: './profile.html',
-//   styleUrl: './profile.css',
-// })
-// export class ProfileComponent {
-//   isEditing: boolean = false;
-//   isLoading: boolean = true;
-//   user: User | null = null;
-//   followers: boolean = false;
-//   following: boolean = false;
-//   myprofile: boolean = false;
-//   constructor(private profileservice:ProfileService){}
-
-//   ngOnInit(): void {
-//     this.profileservice.fetchUserProfile().subscribe(user => {
-//       // console.log('User profile fetched:', user);
-//       this.user = user;
-//       // if (this.user.username === this.profileservice.getCurrentUsername()) {
-//       //   this.myprofile = true;
-//       // }else {
-//       //   this.myprofile = false;
-//       // }
-//       if (!this.user.avatarUrl) {
-//         this.user.avatarUrl = "https://i.pinimg.com/474x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg";
-//       }
-//     });
-//     this.isLoading = false;
-//   }
-
-
-
-//   onSubmit(): void {
-//     this.profileservice.updateUserProfile(this.user!);
-//     console.log('Updated user profile:', this.user);
-//     this.isEditing = false;
-//   }
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -267,7 +223,7 @@ reportUser() {
 
 
   checkdata(data: User): boolean {
-    if (!data.firstName || !data.lastName || !data.email  ) {
+    if (!data.firstName || !data.lastName ) {
       this.erroorMessage = 'Please fill in all required fields.';
       return true;
     }
@@ -286,10 +242,10 @@ reportUser() {
       this.erroorMessage = 'Password must be at least 8 characters long';
       return true ;
     }
-    if (!this.authService.isValidEmail(data.email)) {
-      this.erroorMessage = 'Please enter a valid email address.';
-      return true;
-    }
+    // if (!this.authService.isValidEmail(data.email)) {
+    //   this.erroorMessage = 'Please enter a valid email address.';
+    //   return true;
+    // }
     return false;
   }
 
