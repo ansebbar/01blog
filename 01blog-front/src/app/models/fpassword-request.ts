@@ -3,5 +3,5 @@
 export interface FpasswordRequest {
     email: string;
     newpassword?: string;
-    pin: number | null;
+    pin: string | null;
 }

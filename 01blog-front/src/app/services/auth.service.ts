@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -7,13 +7,16 @@ import { RegisterRequest } from '../models/register-request';
 import { AuthResponse } from '../models/auth-response';
 import { User } from '../models/user';
 import { FpasswordRequest } from '../models/fpassword-request';
+import { Router } from '@angular/router';
+import { NavbarComponent } from '../components/navbar/navbar';
+import { Navservice } from './navservice';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private pin: number = 0;
+  private pin: string = "";
 
     // private auth = signal(false);
   //   private isAuthenticated = signal<boolean>(this.checkInitialAuthState());
@@ -24,20 +27,15 @@ export class AuthService {
   //   isLoggedIn: this.isAuthenticated(),
   //   username: this.currentUsername()
   // }));
-  
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private router: Router) { }
+
+  private nav = inject(Navservice);
 
   
   
   register(registerRequest: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, registerRequest)
-      .pipe(
-        tap(response => {
-          this.saveToken(response.token);
-          this.saveUserInfo(response);
-          // this.setAuthState(true, response.username);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, registerRequest);
   }
   
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
@@ -51,31 +49,22 @@ export class AuthService {
       );
   }
 
-  fpassword(): number {
-    this.pin = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit PIN
-    return this.pin;
-    // return this.http.post<AuthResponse>(`${this.apiUrl}/auth/fpassword`, fpasswordRequest)
-    //   .pipe(
-    //     tap(response => {
-    //       // this.saveToken(response.token);
-    //       // this.saveUserInfo(response);
-    //       // this.setAuthState(true, response.username);
-    //     })
-    //   );
-
-  }
-  fpcheckpin(fpasswordRequest: FpasswordRequest): boolean {
-    return fpasswordRequest.pin === this.pin;
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
-  sendEmail(emailData: { to: string; subject: string; message: string }) { //////backend ba9i ma3mrtha
-    return this.http.post(this.apiUrl, emailData);
+  fpassword(email: string): Observable<boolean> {
+      return this.http.post<boolean>(`${this.apiUrl}/auth/fpassword?email=${email}`,{});
   }
-
   // private setAuthState(isLoggedIn: boolean, username: string | null = null): void {
   //   this.isAuthenticated.set(isLoggedIn);
   //   this.currentUsername.set(username);
   // }
+
+  pinVerify(pin: string, email: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/auth/verify-pin?pin=${pin}&email=${email}`, {});
+  }
 
   getUserInfo(username:String | null): Observable<User> {
     if (!username) {
@@ -83,7 +72,7 @@ export class AuthService {
     }
     console.log('Fetching user info for username:', username);
     return this.http.get<User>(`${this.apiUrl}/profile?username=${username}`,);
-  } 
+  }
   
   private saveToken(token: string): void {
     localStorage.setItem('authToken', token);
@@ -96,10 +85,13 @@ export class AuthService {
   private saveUserInfo(authResponse: AuthResponse): void {
     localStorage.setItem('username', authResponse.username);
     localStorage.setItem('email', authResponse.email);
-    if (authResponse.profileImageUrl)
-        localStorage.setItem('userProfile', authResponse.profileImageUrl || '');
-    else
-        localStorage.setItem('userProfile', ''); //todo default image
+    localStorage.setItem('userid', authResponse.id);
+    console.log('Saving profile image URL:', authResponse.profileImageUrl);
+    localStorage.setItem('userProfile', authResponse.profileImageUrl || '');
+  }
+
+   saveavatar(username: string, avatarUrl: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/profile/avatar?username=${username}&avatarUrl=${avatarUrl}`, {});
   }
   
   getToken(): string | null {
@@ -113,14 +105,42 @@ export class AuthService {
     return localStorage.getItem('userProfile');
   }
   
-  isLoggedIn(): boolean {
-    return !!this.getToken();
+  isLoggedIn(): Observable<boolean> {
+    // console.log("Checking login status in AuthService...");
+    // console.log("helllo");
+    // if (this.getToken() != null && this.getUsername() != null) {
+    
+      console.log("User is logged in. Validating token...", this.getUsername(), this.getToken());
+      return this.http.get<boolean>(`${this.apiUrl}/auth/validate-token?username=${localStorage.getItem('username')}&token=${localStorage.getItem('authToken')}`,);
+    // }
+    // console.log("User is not logged in.");
+    // return false;
+    // return !!this.getToken();
   }
   
   logout(): void {
-    localStorage.removeItem('authToken');
+    // console.log("Logging out user.");
+
+    // this.navbarComponent.updateLogin(false);
+    // this.nav.updateLogin(false);
+    this.nav.setLoginStatus(false);
     localStorage.removeItem('username');
     localStorage.removeItem('email');
-    // this.auth.set(false);
+    this.http.put<void>(`${this.apiUrl}/auth/logout`, {}, {
+      headers: {
+        'Authorization': `${this.getToken()}`
+      }
+    }).subscribe({
+      next: () => {
+        console.log("Logout successful on server.");
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error("Error during logout:", error);
+        this.router.navigate(['/login']);
+      }
+    });
+    localStorage.removeItem('authToken');
+
   }
 }

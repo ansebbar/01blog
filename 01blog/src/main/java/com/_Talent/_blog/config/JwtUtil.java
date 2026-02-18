@@ -78,7 +78,13 @@ public class JwtUtil {
             final String username = getUsername(token);
             return (username.equals(userDetails.getUsername()) && !TkExpired(token));
         } catch (Exception e) {
+            // System.out.println("Token validation error: " + e.getMessage());
             return false;
         }
+    }
+    public static boolean isAuthenticatedUser(String username) {
+
+        
+        return true; // Replace with actual authentication check
     }
 }

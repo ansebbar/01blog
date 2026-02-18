@@ -1,9 +1,196 @@
-/* Optional: Add custom register styles */
-.card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Registration Page Styling */
+.min-vh-100 {
+  min-height: 100vh;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+/* Form Styling */
+.form-floating > .form-control {
+  height: calc(3.5rem + 2px);
+  line-height: 1.25;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-top: 1.625rem;
+  padding-bottom: 0.625rem;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active .step-number {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.step-indicator.active .step-label {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background-color: #e9ecef;
+  margin: 0 10px;
+  position: relative;
+  top: 20px;
+}
+
+/* Avatar Upload */
+.avatar-upload-container {
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.avatar-upload-container:hover {
+  background-color: #f0f0f0;
+  border-color: #4f46e5 !important;
+}
+
+.avatar-placeholder {
+  transition: all 0.3s ease;
+}
+
+.avatar-upload-container:hover .avatar-placeholder {
+  transform: scale(1.05);
+  border-color: #4f46e5 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Password Strength */
+.password-strength .progress {
+  background-color: #e9ecef;
+  border-radius: 2px;
+}
+
+.password-strength .progress-bar {
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Benefit Items */
+.benefit-icon {
+  min-width: 56px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover .benefit-icon {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Trust Badges */
+.trust-badge {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.trust-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Button Styling */
+.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:disabled {
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+}
+
+/* Input Groups */
+.input-group .btn-outline-secondary {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-color: #dee2e6;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 2rem !important;
+  }
+  
+  .step-label {
+    display: none !important;
+  }
+}
+
+/* Animation */
+form {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* File Upload Preview */
+#avatarUpload:valid + .avatar-preview .avatar-placeholder {
+  border-color: #10b981 !important;
+  background-color: #d1fae5;
 }

@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import com._Talent._blog.model.Entity.*;
-import com._Talent._blog.services.*;;
+// import com._Talent._blog.services.*;;
 
 @RestController
-@RequestMapping("/api/users")  // This defines the base path
-@CrossOrigin(origins = "http://localhost:4200") // Allow Angular origin
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:4200") 
 public class UserController {
 
-    // Temporary in-memory storage for testing
     private List<User> users = new ArrayList<>();
     // private Long nextId = 1L;
-    @Autowired
-    private RegistrationService nwuser;
+    // @Autowired
+    // private RegistrationService nwuser;
 
     public UserController() {
         // Add some test data
@@ -23,7 +22,6 @@ public class UserController {
         users.add(new User());
     }
 
-    // GET all users
     @GetMapping
     public List<User> getAllUsers() {
         return users;
@@ -31,7 +29,7 @@ public class UserController {
 
     // GET user by ID
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Integer id) {
+    public User getUserById(@PathVariable("id") Long id) {
         return users.stream()
                 .filter(user -> user.getId().equals(id))
                 .findFirst()
@@ -60,7 +58,7 @@ public class UserController {
 
     // DELETE user
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable("id") Integer id) {
         users.removeIf(user -> user.getId().equals(id));
     }
 }

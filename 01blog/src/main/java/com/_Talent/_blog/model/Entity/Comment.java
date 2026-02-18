@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
     
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -36,15 +36,12 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
-    
-    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Comment> replies = new ArrayList<>();
-    
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CommentLike> likes = new ArrayList<>();
+    private List<PostLike> commentLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Report> reports = new ArrayList<>();
+    
     
     @PrePersist
     protected void onCreate() {
@@ -57,17 +54,72 @@ public class Comment {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper methods
-    public boolean isReply() {
-        return parentComment != null;
+    public void addReport(Report report) {
+        reports.add(report);
     }
-    
+        @Transient
     public int getLikeCount() {
-        return likes != null ? likes.size() : 0;
+        return (int) commentLikes.stream()
+            .filter(like -> "LIKE".equals(like.getType()))
+            .count();
     }
     
-    public int getReplyCount() {
-        return replies != null ? replies.size() : 0;
+    @Transient
+    public int getDislikeCount() {
+        return (int) commentLikes.stream()
+            .filter(like -> "DISLIKE".equals(like.getType()))
+            .count();
     }
     
+    public boolean isLikedBy(User user) {
+        return commentLikes.stream()
+            .anyMatch(like -> like.getUser().equals(user) && "LIKE".equals(like.getType()));
+    }
+    
+    public boolean isDislikedBy(User user) {
+        return commentLikes.stream()
+            .anyMatch(like -> like.getUser().equals(user) && "DISLIKE".equals(like.getType()));
+    }
+    
+    public void like(User user) {
+        if(commentLikes.removeIf(like -> like.getUser().equals(user) && "DISLIKE".equals(like.getType()))){
+            this.dislike(user);
+        }
+        
+        boolean alreadyLiked = commentLikes.stream()
+            .anyMatch(like -> like.getUser().equals(user) && "LIKE".equals(like.getType()));
+        
+        if (!alreadyLiked) {
+            PostLike like = new PostLike();
+            like.setComment(this);
+            like.setUser(user);
+            like.setType("LIKE");
+            commentLikes.add(like);
+        }
+    }
+    
+    public void dislike(User user) {
+        if(commentLikes.removeIf(like -> like.getUser().equals(user) && "LIKE".equals(like.getType()))){
+            this.like(user);
+        }
+        
+        boolean alreadyDisliked = commentLikes.stream()
+            .anyMatch(like -> like.getUser().equals(user) && "DISLIKE".equals(like.getType()));
+        
+        if (!alreadyDisliked) {
+            PostLike dislike = new PostLike();
+            dislike.setComment(this);
+            dislike.setUser(user);
+            dislike.setType("DISLIKE");
+            commentLikes.add(dislike);
+        }
+    }
+    
+    public void removeLike(User user) {
+        commentLikes.removeIf(like -> like.getUser().equals(user) && "LIKE".equals(like.getType()));
+    }
+    
+    public void removeDislike(User user) {
+        commentLikes.removeIf(like -> like.getUser().equals(user) && "DISLIKE".equals(like.getType()));
+    }
 }

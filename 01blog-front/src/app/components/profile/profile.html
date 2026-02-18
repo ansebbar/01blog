@@ -1,177 +1,718 @@
-<!-- <h1 class="Profiledata bg-primary">{{user}} profile.</h1>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-        <div class="card mt-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Profile Information</h3>
-            <button class="btn btn-secondary btn-sm" (click)="isEditing = !isEditing">
-                {{ isEditing ? 'Cancel' : 'Edit Profile' }}
-            </button>
-            </div>
-            <div class="card-body">
-            @if(isEditing && user) {
-            <form (ngSubmit)="onSubmit()" #profileForm="ngForm">
-                <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" 
-                         [(ngModel)]="user.firstName" name="firstName" required>
-                </div>
-                <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" 
-                         [(ngModel)]="user.lastName" name="lastName" required>
-                </div>
-                <div class="mb-3">
-                <label for="bio" class="form-label">Bio</label>
-                <textarea class="form-control" id="bio" rows="3"
-                            [(ngModel)]="user.bio" name="bio"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">
-                Save Changes
-                </button>
-            </form>
-            }
-            @if(!isEditing && user) {
-            <ng-template #viewMode>
-                <p><strong>First Name:</strong> {{ user.firstName }}</p>
-                <p><strong>Last Name:</strong> {{ user.lastName }}</p>
-                <p><strong>Bio:</strong> {{ user.bio || 'No bio available.' }}</p>
-            </ng-template>
-            }
-            </div>
-        </div>
-        </div>
+<div class="container-fluid py-4">
+  @if(isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h4 class="mt-3 text-muted">Loading your profile...</h4>
+      <p class="text-secondary">Please wait while we fetch information</p>
     </div>
-</div> -->
-
-<div class="container">
-  <!-- Loading State -->
-   @if(isLoading) {
-  <div class="text-center">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <p>Loading your profile...</p>
-  </div>
-    }
+  }
 
   @if(user && !isLoading) {
-  <div>
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <h3>Your Profile</h3>
-        <button class="btn btn-primary" (click)="toggleEdit()">
-          {{ isEditing ? 'Cancel' : 'Edit' }}
-        </button>
-      </div>
-      
-      <div class="card-body">
-        @if(!isEditing) {
-        <div>
-          <img [src]="user.avatarUrl" 
-               alt="Profile Picture" class="img-thumbnail mb-3" width="150">
-          <button class="btn btn-secondary mb-3" (click)="toggleFollowers()">
-            followers ({{ user.followersCount }})
-          </button>
-          <button class="btn btn-secondary mb-3" (click)="toggleFollowing()">
-            following ({{ user.followingCount }})
-          </button>
-          <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-          <p><strong>Username:</strong> {{ user.username }}</p>
+    <div class="row">
+      <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden sticky-top" style="top: 2rem;">
+          <!-- Profile Header -->
+          <div class="profile-header bg-gradient-primary text-white p-4">
+            <div class="text-center">
+              <!-- Avatar -->
+              <div class="position-relative d-inline-block mb-3">
+                <img [src]='user.avatarUrl' 
+                     alt="Profile Picture" 
+                     class="avatar-img rounded-circle border border-4 border-white shadow-lg"
+                     style="width: 140px; height: 140px; object-fit: cover;">
+@if (this.myprofile) {
+  <button class="btn btn-light btn-sm rounded-circle position-absolute bottom-0 end-0 shadow-sm"
+          (click)="toggleEdit()"
+          title="Edit Profile">
+    <i class="bi bi-pencil"></i>
+  </button>
+} @else {
+  <!-- @if() -->
+      @if(isFollowing) {
+    <button class="btn btn-light btn-sm rounded-circle position-absolute bottom-0 end-0 shadow-sm"
+            (click)="toggleFollow()"
+            title="Unfollow User">
+      <i class="bi bi-person-dash"></i>
+    </button>
+  } @else {
+  <button class="btn btn-light btn-sm rounded-circle position-absolute bottom-0 end-0 shadow-sm"
+          (click)="toggleFollow()"
+          title="Follow User">
+    <i class="bi bi-person-plus"></i>
+  </button>
+}
+<button class="btn btn-light btn-sm rounded-circle position-absolute bottom-0 start-0 shadow-sm"
+        (click)="this.reported = !this.reported"
+        title="Report User">
+  <i class="bi bi-flag text-danger"></i>
+</button>
+@if(this.reported) {
+  <div class="report-modal position-absolute top-100 start-50 translate-middle bg-white border rounded p-3 shadow-lg" style="width: 250px; z-index: 10;">
+    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close" (click)="reported = false"></button>
+    <h6 class="fw-bold text-dark mb-2">Report User</h6>
+    <textarea class="form-control mb-2" rows="3" placeholder="Reason for reporting..." [(ngModel)]="reportReason"></textarea>
+    <button class="btn btn-danger btn-sm w-100" (click)="reportUser()">Submit Report</button>
+  </div>
+}
 
 
-        </div>
-
-        @if(followers && user.followers){
-          <div>
-            <h4>Followers List</h4>
-            @if(user.followers.size === 0){
-              <p>No followers to display.</p>
-            }
-            <ul>
-              @for(foller of user.followers; track user.followers.values()){
-                <li>{{ foller }}</li>
-              }
-            </ul>
+}
+              </div>
+              
+              <!-- Name and Username -->
+              <h3 class="fw-bold mb-1">{{ user.firstName }} {{ user.lastName }}</h3>
+              <p class="opacity-75 mb-0">@{{ user.username }}</p>
+              <!-- <span class="badge bg-light text-primary mt-2">
+                <i class="bi bi-patch-check-fill me-1"></i>Verified Member
+              </span> -->
+            </div>
           </div>
-        }
-        @if(following && user.following){
-          <div>
-            <h4>Following List</h4>
-            @if(user.following.size === 0){
-              <p>No following to display.</p>
-            }
-            <ul>
-              @for(folling of user.following; track user.following.values()){
-                <li>{{ folling }}</li>
-              }
-            </ul>
-          </div>
-        }
-    }
-        @if(isEditing){
-        <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label class="form-label">First Name</label>
-            <input type="text" class="form-control" 
-                   [(ngModel)]="user.firstName" 
-                   name="firstName"
-                   [value]="user.firstName || ''"> 
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Last Name</label>
-            <input type="text" class="form-control" 
-                   [(ngModel)]="user.lastName" 
-                   name="lastName"
-                   [value]="user.lastName || ''">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Bio</label>
-            <textarea class="form-control" rows="3"
-                      [(ngModel)]="user.bio" 
-                      name="bio">{{ user.bio || '' }}</textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Avatar URL</label>
-            <input type="text" class="form-control" 
-                   [(ngModel)]="user.avatarUrl" 
-                   name="avatarUrl"
-                   [value]="user.avatarUrl || ''">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" 
-                   [(ngModel)]="user.email" 
-                   name="email"
-                   [value]="user.email || ''">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" 
-                   [(ngModel)]="user.username" 
-                   name="username"
-                   [value]="user.username || ''">
-          </div>
-          <!-- <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" 
-                   [(ngModel)]="user.password" 
-                   name="password"
-                   [value]="user.password || ''">
-          </div> -->
-          <button type="submit" class="btn btn-success">Save Changes</button>
-        </form>
-    }
-      </div>
+          
+          <div class="card-body p-4">
+<div class="row text-center mb-4">
+  <div class="col-4" (click)="onPostsClick()">
+    <div class="d-flex flex-column clickable-count" 
+         [class.active-section]="activeSection === 'posts'">
+      <span class="fs-3 fw-bold text-dark">{{ user.postsCount || 0 }}</span>
+      <span class="text-muted small">Posts</span>
     </div>
   </div>
-}
-
-   @if(!user && !isLoading) {
-  <div class="alert alert-warning">
-    No user profile data available.
+  
+  <div class="col-4"  (click)="onFollowersClick()"> 
+    <div class="d-flex flex-column clickable-count" 
+         [class.active-section]="activeSection === 'followers'">
+      <span class="fs-3 fw-bold text-dark">{{ user.followersCount || 0 }}</span>
+      <span class="text-muted small">Followers</span>
+    </div>
   </div>
+  
+  <div class="col-4" (click)="onFollowingClick()">
+    <div class="d-flex flex-column clickable-count" 
+         [class.active-section]="activeSection === 'following'">
+      <span class="fs-3 fw-bold text-dark">{{ user.followingCount || 0 }}</span>
+      <span class="text-muted small">Following</span>
+    </div>
+  </div>
+</div>   
+            <div class="mb-4">
+              <h6 class="text-dark fw-semibold mb-3 d-flex align-items-center">
+                <i class="bi bi-person-lines-fill me-2 text-primary"></i>About
+              </h6>
+              <p class="text-secondary mb-0" [innerHTML]="user.bio || 'No bio added yet'"></p>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-calendar text-muted me-2"></i>
+                <span class="text-secondary">Joined {{ user.createdAt | date:'MMM yyyy' }}</span>
+              </div>
+            </div>
+            
+            @if (this.myprofile) {
+            <div class="mb-4">
+              <h6 class="text-dark fw-semibold mb-3 d-flex align-items-center">
+                <i class="bi bi-envelope-fill me-2 text-primary"></i>Contact
+              </h6>
+              <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-envelope text-muted me-2"></i>
+                <span class="text-secondary">{{ user.email }}</span>
+              </div>
+            </div>
+          }
+          
+            
+            <!-- Account Stats -->
+            <!-- <div>
+              <h6 class="text-dark fw-semibold mb-3 d-flex align-items-center">
+                <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Account Stats
+              </h6>
+              <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"></div>
+              </div>
+              <p class="small text-muted mb-0">Profile completeness: 85%</p>
+            </div> -->
+          </div>
+          
+          <div class="card-footer bg-light border-0 p-4">
+            <div class="d-grid gap-2">
+@if (this.myprofile) {
+  <button class="btn btn-primary d-flex align-items-center justify-content-center"
+          (click)="toggleEdit()">
+    <i class="bi bi-pencil-square me-2"></i>
+    {{ isEditing ? 'Cancel Editing' : 'Edit Profile' }}
+  </button>
+} @else if(!this.myprofile) {
+  <button class="btn btn-primary d-flex align-items-center justify-content-center"
+          (click)="toggleFollow()">
+          <!-- <p>foolow</p> -->
+    <i class="bi bi-person-plus me-2"></i>
+    {{ isFollowing ? 'Unfollow' : 'Follow' }}
+  </button>
 }
+              <!-- <button class="btn btn-outline-primary d-flex align-items-center justify-content-center">
+                <i class="bi bi-share me-2"></i>Share Profile
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content Area -->
+      <div class="col-lg-8">
+        <!-- Followers/Following Lists -->
+        @if(followers && user.followers) {
+          <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-white border-0 py-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-dark mb-0">
+                  <i class="bi bi-people-fill me-2 text-primary"></i>
+                  Followers ({{ user.followersCount }})
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary" (click)="toggleFollowers()">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              @if(user.followers.length === 0){
+                <div class="text-center py-5">
+                  <i class="bi bi-people display-4 text-muted opacity-25"></i>
+                  <h5 class="text-muted mt-3">No followers yet</h5>
+                  <p class="text-secondary">Start creating content to attract followers!</p>
+                </div>
+              } @else {
+                <div class="list-group list-group-flush">
+                  @for(follower of user.followers; track $index) {
+                    <div class="list-group-item border-0 py-3 px-4">
+                      <div class="d-flex align-items-center">
+                        <img [src]="follower.avatarUrl" 
+                             class="rounded-circle me-3" 
+                             style="width: 48px; height: 48px; object-fit: cover;">
+                        <div class="flex-grow-1">
+                          <h6 class="mb-0 fw-semibold">{{ follower.firstName }} {{ follower.lastName }}</h6>
+                          <small class="text-muted">@{{ follower.username }}</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary">Follow Back</button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        @if(following && user.following) {
+          <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-white border-0 py-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-dark mb-0">
+                  <i class="bi bi-person-heart me-2 text-primary"></i>
+                  Following ({{ user.followingCount }})
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary" (click)="toggleFollowing()">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              @if(user.following.length === 0){
+                <div class="text-center py-5">
+                  <i class="bi bi-person-plus display-4 text-muted opacity-25"></i>
+                  <h5 class="text-muted mt-3">Not following anyone yet</h5>
+                  <p class="text-secondary">Discover and follow interesting creators!</p>
+                </div>
+              } @else {
+                <div class="list-group list-group-flush">
+                  @for(following of user.following; track $index) {
+                    <div class="list-group-item border-0 py-3 px-4">
+                      <div class="d-flex align-items-center">
+                        <img [src]="following.avatarUrl" 
+                             class="rounded-circle me-3" 
+                             style="width: 48px; height: 48px; object-fit: cover;">
+                        <div class="flex-grow-1">
+                          <h6 class="mb-0 fw-semibold">{{ following.firstName }} {{ following.lastName }}</h6>
+                          <small class="text-muted">@{{ following.username }}</small>
+                          <div class="mt-1">
+                            <span class="badge bg-light text-dark">{{ following.postsCount }} posts</span>
+                          </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary">Unfollow</button> 
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        } 
+     
+
+        <!-- Profile Edit Form -->
+        @if(isEditing){
+          <div class="card border-0 shadow-lg rounded-4 mb-4">
+            <div class="card-header bg-white border-0 py-4">
+              <div class="d-flex align-items-center">
+                <div class="icon-wrapper bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3">
+                  <i class="bi bi-pencil-square fs-4"></i>
+                </div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1">Edit Profile</h4>
+                  <p class="text-secondary mb-0">Update your personal information</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+              <form (ngSubmit)="onSubmit()" #profileForm="ngForm" novalidate>
+                <div class="row">
+                  <div class="col-md-4 mb-4">
+                    <div class="text-center">
+                      <div class="avatar-edit mb-3">
+                        <div class="avatar-preview mb-3">
+                          <img [src]="user.avatarUrl" 
+                               alt="Profile" 
+                               class="rounded-circle shadow-sm"
+                               style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <div class="d-grid gap-2">
+                          <label class="btn btn-outline-primary btn-sm cursor-pointer">
+                            <i class="bi bi-upload me-2"></i>Upload New
+                            <input type="file" class="d-none" accept="image/*" (change)="onAvatarChange($event)">
+                          </label>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="removeAvatar()">
+                            <i class="bi bi-trash me-2"></i>Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Form Fields -->
+                  <div class="col-md-8">
+                    <div class="row g-3">
+                      <!-- First Name -->
+                      <div class="col-md-6">
+                        <label class="form-label fw-semibold text-dark">First Name</label>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-person text-muted"></i>
+                          </span>
+                          <input type="text" 
+                                 class="form-control border-start-0" 
+                                 [(ngModel)]="user.firstName" 
+                                 name="firstName"
+                                 required>
+                        </div>
+                      </div>
+                      
+                      <!-- Last Name -->
+                      <div class="col-md-6">
+                        <label class="form-label fw-semibold text-dark">Last Name</label>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-person text-muted"></i>
+                          </span>
+                          <input type="text" 
+                                 class="form-control border-start-0" 
+                                 [(ngModel)]="user.lastName" 
+                                 name="lastName"
+                                 required>
+                        </div>
+                      </div>
+                      
+                      <!-- Username -->
+                      <!-- <div class="col-md-6"> -->
+                        <!-- <label class="form-label fw-semibold text-dark">Username</label>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-at text-muted"></i>
+                          </span>
+                          <input type="text" 
+                                 class="form-control border-start-0" 
+                                 [(ngModel)]="user.username" 
+                                 name="username"
+                                 required>
+                        </div> -->
+                        <!-- <div class="form-text text-muted small">
+                          <i class="bi bi-info-circle me-1"></i>
+                          Your unique identifier on 01Blog
+                        </div>
+                      </div> -->
+                      
+                      <div class="col-md-6">
+                        <label class="form-label fw-semibold text-dark">Email</label>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-envelope text-muted"></i>
+                          </span>
+                          <input type="email" 
+                                 class="form-control border-start-0" 
+                                 [(ngModel)]="user.email" 
+                                 name="email"
+                                 required>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12">
+                        <label class="form-label fw-semibold text-dark">Bio</label>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0 align-items-start pt-3">
+                            <i class="bi bi-card-text text-muted"></i>
+                          </span>
+                          <textarea class="form-control border-start-0" 
+                                    rows="4"
+                                    [(ngModel)]="user.bio" 
+                                    name="bio"
+                                    placeholder="Tell the community about yourself..."></textarea>
+                        </div>
+                        <div class="form-text text-muted d-flex justify-content-between">
+                          <span><i class="bi bi-lightbulb me-1"></i>Share your interests, expertise, or story</span>
+                          <span>{{ user.bio?.length || 0 }}/250</span>
+                        </div>
+                      </div>
+                      @if(this.passwordModalOpen) {
+                        <div class="col-12">
+                          <label class="form-label fw-semibold text-dark">Change Password</label>
+                          <div class="input-group mb-2">
+                            <span class="input-group-text bg-white border-end-0">
+                              <i class="bi bi-lock text-muted"></i>
+                            </span>
+                            <input type="password"
+                                    [(ngModel)]="user.password"
+                                    name="password" 
+                                   class="form-control border-start-0" 
+                                   placeholder="New Password">
+                          </div>
+                          <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                              <i class="bi bi-lock-fill text-muted"></i>
+                            </span>
+                            <input type="password"
+                                    [(ngModel)]="confirmpass"
+                                    name="confirmpass"
+                                   class="form-control border-start-0" 
+                                   placeholder="Confirm New Password">
+                          </div>
+                        </div>
+                      }
+                      @if(erroorMessage.length > 0) {
+                        <div class="col-12">
+                          <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>{{ erroorMessage }}</div>
+                          </div>
+                        </div>
+                      }
+                      <!-- <div class="col-12">
+                        <label class="form-label fw-semibold text-dark">Social Links</label>
+                        <div class="input-group mb-2">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-twitter text-info"></i>
+                          </span>
+                          <input type="url" 
+                                 class="form-control border-start-0" 
+                                 placeholder="Twitter Profile URL">
+                        </div>
+                        <div class="input-group mb-2">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-linkedin text-primary"></i>
+                          </span>
+                          <input type="url" 
+                                 class="form-control border-start-0" 
+                                 placeholder="LinkedIn Profile URL">
+                        </div>
+                        <div class="input-group">
+                          <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-github"></i>
+                          </span>
+                          <input type="url" 
+                                 class="form-control border-start-0" 
+                                 placeholder="GitHub Profile URL">
+                        </div>
+                      </div> -->
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                      <button type="button" 
+                              class="btn btn-outline-secondary" 
+                              (click)="toggleEdit()">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                      </button>
+                      <div class="d-flex gap-2">
+                        <button type="button" 
+                                class="btn btn-outline-primary"
+                                (click)="openPasswordModal()">
+                          <i class="bi bi-lock me-2"></i>Change Password
+                        </button>
+                        <button type="submit" 
+                                class="btn btn-primary"
+                                [disabled]="profileForm.invalid">
+                          <i class="bi bi-check-circle me-2"></i>Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        }
+
+        <!-- User Posts/Activity (Optional Section)card border-0 shadow-lg rounded-4 mb-4 -->
+         @if(!isEditing && isFollowing || myprofile) {
+<div class="col-lg-12">
+  @if(activeSection === 'posts') {
+    <div class="card border-0 shadow-lg rounded-4 mb-4">
+      <div class="card-header bg-white border-0 py-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="fw-bold text-dark mb-1">Posts</h4>
+            @if(myprofile) {
+              <p class="text-secondary mb-0">Your latest posts and interactions</p>
+            } @else {
+              <p class="text-secondary mb-0">Latest posts by {{user?.firstName}}</p>
+            }
+          </div>
+          @if(myprofile) {
+            <a routerLink="/post-creation" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i>Create Post
+            </a>
+          }
+        </div>
+      </div>
+      <div class="card-body">
+        @if(this.user && user.posts.length > 0) {
+          <div class="row g-4">
+            @for(post of user.posts; track $index) {
+              <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 hover-card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-start mb-3">
+                      <div class="flex-grow-1">
+                        @if(post.title.length > 10) {
+                          <h6 class="fw-semibold mb-1 text-truncate">{{ post.title | slice:0:10 }}...</h6>
+                        } @else {
+                          <h6 class="fw-semibold mb-1 text-truncate">{{ post.title }}</h6>
+                        }                        <small class="text-muted">
+                          <i class="bi bi-calendar me-1"></i>
+                          {{ post.dateFrom | date:'MMM d' }}
+                        </small>
+                      </div>
+                    </div>
+                    <p class="text-secondary small mb-3" 
+                       style="height: 60px; overflow: hidden; line-height: 1.4;">
+                      {{ post.content | slice:0:120 }}...
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="badge bg-light text-dark me-2">
+                          <i class="bi bi-chat me-1"></i>{{ post.commentsCount || 0 }}
+                        </span>
+                        <span class="badge bg-light text-dark">
+                          <i class="bi bi-heart me-1"></i>{{ post.likes || 0 }}
+                        </span>
+                      </div>
+                      <a [routerLink]="['/posts', post.id]" class="btn btn-sm btn-outline-primary">
+                        Read
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="text-center py-5">
+            <i class="bi bi-file-text display-4 text-muted opacity-25 mb-3"></i>
+            <h5 class="text-muted">No posts yet</h5>
+            <p class="text-secondary mb-4">Start sharing your thoughts!</p>
+            @if(myprofile) {
+              <a routerLink="/post-creation" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Create First Post
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Followers Section -->
+  @if(activeSection === 'followers') {
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 py-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="fw-bold text-dark mb-1">Followers</h4>
+            <p class="text-secondary mb-0">People who follow {{user?.firstName}}</p>
+          </div>
+          <span class="badge bg-primary">{{ user.followersCount || 0 }} followers</span>
+        </div>
+      </div>
+      <div class="card-body">
+        @if(user.followers && user.followers.length > 0) {
+          <div class="row g-3">
+            @for(follower of user.followers; track $index) {
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-card">
+                  <div class="card-body d-flex align-items-center">
+                    <img [routerLink]="['/profile', follower.username]" 
+                         [src]="follower.avatarUrl || 'https://ui-avatars.com/api/?name='+follower.firstName+'+'+follower.lastName+'&background=4f46e5&color=fff'"
+                         class="rounded-circle me-3"
+                         style="width: 50px; height: 50px; object-fit: cover;">
+                    <div class="flex-grow-1">
+                      <h6 class="fw-semibold mb-0">{{ follower.firstName }} {{ follower.lastName }}</h6>
+                      <small class="text-muted d-block">@{{ follower.username }}</small>
+                      @if(follower.bio) {
+                        <small class="text-secondary d-block mt-1" style="font-size: 0.8rem;">
+                          {{ (follower.bio.length > 40) ? (follower.bio | slice:0:40) + '...' : follower.bio }}
+                        </small>
+                      }
+                    </div>
+                    <!-- @if(!myprofile && !follower.followers) {
+                      <button class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-person-plus me-1"></i>Follow
+                      </button>
+                    }
+                    @if(!myprofile && follower.isFollowing) {
+                      <button class="btn btn-primary btn-sm">
+                        <i class="bi bi-person-check me-1"></i>Following
+                      </button>
+                    } -->
+                    <!-- @if(myprofile && follower.username !== user.username) {
+                      <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-person-dash me-1"></i>Remove
+                      </button>
+                    } -->
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="text-center py-5">
+            <i class="bi bi-people display-4 text-muted opacity-25 mb-3"></i>
+            <h5 class="text-muted">No followers yet</h5>
+            <!-- <p class="text-secondary mb-4">Share your profile to attract followers!</p> -->
+            <!-- @if(myprofile) {
+              <button class="btn btn-primary" (click)="shareProfile()">
+                <i class="bi bi-share me-2"></i>Share Profile
+              </button>
+            } -->
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Following Section -->
+  @if(activeSection === 'following') {
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 py-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="fw-bold text-dark mb-1">Following</h4>
+            <p class="text-secondary mb-0">People {{user?.firstName}} follows</p>
+          </div>
+          <span class="badge bg-primary">{{ user.followingCount || 0 }} following</span>
+        </div>
+      </div>
+      <div class="card-body">
+        @if(user.following && user.following.length > 0) {
+          <div class="row g-3">
+            @for(following of user.following; track $index) {
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100 hover-card">
+                  <div class="card-body d-flex align-items-center">
+                    <img [routerLink]="['/profile', following.username]"
+                         [src]="following.avatarUrl || 'https://ui-avatars.com/api/?name='+following.firstName+'+'+following.lastName+'&background=4f46e5&color=fff'"
+                         class="rounded-circle me-3"
+                         style="width: 50px; height: 50px; object-fit: cover;">
+                    <div class="flex-grow-1">
+                      <h6 class="fw-semibold mb-0">{{ following.firstName }} {{ following.lastName }}</h6>
+                      <small class="text-muted d-block">@{{ following.username }}</small>
+                      @if(following.bio) {
+                        <small class="text-secondary d-block mt-1" style="font-size: 0.8rem;">
+                          {{ (following.bio.length > 40) ? (following.bio | slice:0:40) + '...' : following.bio }}
+                        </small>
+                      }
+                      <div class="mt-2">
+                        <span class="badge bg-light text-dark me-2">
+                          <i class="bi bi-file-text me-1"></i>{{ following.postsCount || 0 }}
+                        </span>
+                        <span class="badge bg-light text-dark">
+                          <i class="bi bi-people me-1"></i>{{ following.followersCount || 0 }}
+                        </span>
+                      </div>
+                    </div>
+                    <!-- @if(myprofile) {
+                      <button class="btn btn-outline-secondary btn-sm" 
+                              (click)="toggleFollow()">
+                        <i class="bi bi-person-dash me-1"></i>Unfollow
+                      </button>
+                    }
+                    @if(!myprofile && !isFollowing) {
+                      <button class="btn btn-outline-primary btn-sm" (click)="toggleFollow()">
+                        <i class="bi bi-person-plus me-1"></i>Follow
+                      </button>
+                    } -->
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="text-center py-5">
+            <i class="bi bi-person-plus display-4 text-muted opacity-25 mb-3"></i>
+            <h5 class="text-muted">Not following anyone yet</h5>
+            <p class="text-secondary mb-4">Discover and follow interesting creators!</p>
+            @if(myprofile) {
+              <a routerLink="/explore" class="btn btn-primary">
+                <i class="bi bi-compass me-2"></i>Explore Users
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+      }@else if(!isEditing && !isFollowing && !myprofile) {
+        <div class="text-center py-5">
+          <i class="bi bi-person-x display-1 text-warning"></i>
+          <h3 class="fw-bold text-dark mt-3">Profile Not Available</h3>
+          <p class="text-secondary mb-4">Follow to view this profile.</p>
+          <a routerLink="/" class="btn btn-outline-primary">
+            <i class="bi bi-house me-2"></i>Go Home
+          </a>
+          </div>
+        }
+
+      </div>
+    </div>
+  }
+
+  @if(!user && !isLoading) {
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4">
+          <div class="card-body text-center p-5">
+            <div class="mb-4">
+              <i class="bi bi-person-x display-1 text-warning"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Profile Not Found</h3>
+            <p class="text-secondary mb-4">We couldn't load your profile information. Please try again or contact support if the issue persists.</p>
+            <div class="d-flex justify-content-center gap-3">
+              <button class="btn btn-primary" (click)="reloadProfile()">
+                <i class="bi bi-arrow-clockwise me-2"></i>Reload Profile
+              </button>
+              <a routerLink="/" class="btn btn-outline-primary">
+                <i class="bi bi-house me-2"></i>Go Home
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </div>

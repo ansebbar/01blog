@@ -1,10 +1,6 @@
 package com._Talent._blog.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com._Talent._blog.model.*;
-import java.util.List;
 import com._Talent._blog.repositery.*;
 import java.util.Optional;
 import com._Talent._blog.model.Entity.*;

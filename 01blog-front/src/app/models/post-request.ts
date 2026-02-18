@@ -1,8 +1,9 @@
 export interface PostRequest {
     title: string;
     content: string;
-    categories: string[];
+    categories: string;
     creator: string;
-    id ?: number;
+    // id ?: number;
+    visibility: string;
 }
 // services and components

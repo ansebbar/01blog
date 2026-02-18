@@ -1,9 +1,145 @@
-/* Optional: Add custom login styles */
-.card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Login Page Styling */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
 }
 
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 16px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Form Controls */
+.input-group-lg .form-control,
+.input-group-lg .input-group-text {
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+.input-group .form-control:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+}
+
+/* Form Labels */
+.form-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+/* Divider */
+.divider {
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #dee2e6;
+}
+
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #dee2e6;
+}
+
+/* Features List */
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button Styling */
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:disabled {
+  background: linear-gradient(135deg, #a5a2e0 0%, #b8a6ed 100%);
+  transform: none;
+}
+
+/* Social Buttons */
+.btn-outline-primary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+}
+
+.btn-outline-dark:hover {
+  background: #333;
+  color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .container-fluid {
+    padding: 2rem 1rem;
+  }
+  
+  .card-body {
+    padding: 2rem !important;
+  }
+  
+  .input-group-lg .form-control,
+  .input-group-lg .input-group-text {
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Animation for form */
+form {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Password Toggle */
+#togglePassword {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#togglePassword:hover {
+  color: #4f46e5 !important;
+}
+
+/* Alert Styling */
+.alert {
+  border: none;
+  border-left: 4px solid #dc3545;
+  border-radius: 12px;
 }

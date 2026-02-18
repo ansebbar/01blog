@@ -8,14 +8,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
+    private String id;
     private String token;
     private String type = "Bearer";
     private String username;
     private String email;
+    private String profileImageUrl;
 
-    public AuthResponse(String token, String username, String email) {
+    public AuthResponse(String token, String username, String email,String id, String profileImageUrl) {
         this.token = token;
         this.username = username;
         this.email = email;
+        this.id = id;
+        this.profileImageUrl = profileImageUrl;
     }
 }

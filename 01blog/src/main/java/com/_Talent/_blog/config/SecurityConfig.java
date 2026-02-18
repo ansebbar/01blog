@@ -37,6 +37,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/support/**").permitAll()
+                .requestMatchers("/api/posts/**").permitAll()
+                .requestMatchers("/api/upload/**").permitAll()
+                .requestMatchers("/api/profile/avatar").permitAll()
                 .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )

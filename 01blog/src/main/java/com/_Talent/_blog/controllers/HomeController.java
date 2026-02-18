@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com._Talent._blog.dto.CreatePostRequest;
-import com._Talent._blog.model.Entity.Post;
+// import com._Talent._blog.model.Entity.Post;
 
 @RestController
 @RequestMapping("/api")
@@ -18,6 +18,8 @@ public class HomeController {
     @GetMapping("/home")
     public String home() {
         return "Welcome to the Blog API!";
+        // return postController.getAllPosts();
+        // return ResponseEntity.ok(posts);
     }
     
     @GetMapping("/home/newpost")

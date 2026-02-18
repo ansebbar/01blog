@@ -1,20 +1,128 @@
-.navbar-brand {
-  font-weight: bold;
+/* Navbar Styling */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
 }
-
 
 .navbar {
-  background-color: #70767a;
-  color: white;
-  height: 160px;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  transition: all 0.3s ease;
 }
 
-.navbar-nav {
-  display: static;
-  /* align-items: center; */
-  top: 100px;
+.navbar.scrolled {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-logo {
-  margin-right: 200px;
+  height: 50px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-link {
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 3px;
+}
+
+/* Dropdown Styling */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 0.5rem;
+  min-width: 220px;
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.125rem 0;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white !important;
+  transform: translateX(5px);
+}
+
+.dropdown-toggle::after {
+  transition: transform 0.2s ease;
+}
+
+.dropdown-toggle.show::after {
+  transform: rotate(-180deg);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 0 0 12px 12px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbar-brand .brand-text {
+    font-size: 1.25rem;
+  }
+  
+  .nav-link {
+    margin: 0.25rem 0;
+    text-align: left;
+  }
+  
+  .nav-link.active::after {
+    left: 0;
+    transform: none;
+  }
+}
+
+/* Animation for mobile menu */
+.navbar-collapse.collapsing {
+  transition: height 0.3s ease;
+}
+
+/* For very large logo (769x177) - adjust if needed */
+@media (max-width: 576px) {
+  .navbar-logo {
+    height: 40px;
+  }
+}
+
+/* Scroll behavior */
+@media (min-width: 992px) {
+  .navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(79, 70, 229, 0.95) !important;
+  }
 }

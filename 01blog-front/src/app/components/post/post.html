@@ -1,1 +1,219 @@
-<p>post works!</p>
+<!-- Bootstrap Post Component -->
+<div class="container mt-4">
+  
+  <!-- Loading State -->
+  @if(isLoading) {
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <div class="skeleton skeleton-avatar me-3"></div>
+          <div>
+            <div class="skeleton skeleton-text mb-2" style="width: 150px"></div>
+            <div class="skeleton skeleton-text" style="width: 100px"></div>
+          </div>
+        </div>
+        <div class="skeleton skeleton-title mb-3"></div>
+        <div class="skeleton skeleton-content mb-2"></div>
+        <div class="skeleton skeleton-content"></div>
+      </div>
+    </div>
+  }
+
+  <!-- Post Content -->
+  @else {
+    <div class="card shadow-sm mb-4 border-0">
+      
+      <!-- Post Header - Clickable Avatar & Username -->
+      <div class="card-header bg-white border-bottom-0 pb-0">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <!-- Clickable Avatar -->
+            <a [routerLink]="['/profile', post.creator]" class="text-decoration-none">
+              <img [src]="post.avatarurl || 'assets/default-avatar.png'" 
+                   alt="{{post.creator}}"
+                   class="rounded-circle me-3"
+                   width="50"
+                   height="50"
+                   style="object-fit: cover; cursor: pointer;">
+            </a>
+            <div>
+              <!-- Clickable Username -->
+              <a [routerLink]="['/profile', post.creator]" class="text-decoration-none">
+                <h6 class="mb-1 fw-bold text-dark">{{post.creator}}</h6>
+              </a>
+              <div class="text-muted small d-flex gap-3">
+                <span>
+                  <i class="bi bi-calendar3 me-1"></i>
+                  {{post.dateFrom | date:'short'}}
+                </span>
+                <!-- <span>
+                  <i class="bi bi-clock me-1"></i>
+                  {{calculateReadTime(post.content)}} min read
+                </span> -->
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="badge bg-primary bg-opacity-10 text-primary">
+              @for(category of post.categories; track category) {
+                 {{category}}
+              }
+            </span>
+            @if(post.creator === this.currentUser) {
+            <span class="badge bg-primary bg-opacity-10 text-primary">
+              <button class="btn btn-sm btn-outline-primary" [routerLink]="['/post-creation', post.id]">
+                <i class="bi bi-pencil"></i> Edit </button>
+            </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Body -->
+      <div class="card-body">
+        <!-- Title -->
+        <h2 class="card-title fw-bold mb-4">{{post.title}}</h2>
+
+        <!-- Content with markdown -->
+        <div class="markdown-content mb-4" [innerHTML]="renderedContent"></div>
+
+        <div class="d-flex justify-content-between border-top pt-3">
+          <div class="d-flex gap-2">
+<button class="btn btn-sm d-flex align-items-center gap-2" 
+        [class.btn-danger]="isLiked"
+        [class.btn-outline-danger]="!isLiked"
+        (click)="toggleLike($event)">
+  <i class="bi" 
+     [ngClass]="isLiked ? 'bi-heart-fill' : 'bi-heart'"
+     [style.color]="isLiked ? 'white' : ''"></i>
+  <span [style.color]="isLiked ? 'white' : ''">{{post.likes || 0}}</span>
+</button>
+<button class="btn btn-sm d-flex align-items-center gap-2" 
+        [class.btn-secondary]="isDisliked"
+        [class.btn-outline-secondary]="!isDisliked"
+        (click)="toggleDislike($event)">
+  <i class="bi" 
+     [ngClass]="isDisliked ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'"
+     [style.color]="isDisliked ? 'white' : ''"></i>
+  <span [style.color]="isDisliked ? 'white' : ''">{{post.dislikes || 0}}</span>
+</button>
+
+<!-- <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2">
+  <i class="bi bi-chat"></i>
+  <span>{{post.comments?.length || 0}}</span>
+</button> -->
+@if(this.currentUser !== post.creator) {
+<button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-2" (click)="this.reported = !this.reported">
+   <i class="bi bi-flag"></i> Report </button>
+}@else {
+  <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-2" (click)="deletePost()">
+    <i class="bi bi-trash"></i> Delete </button>
+}
+          </div>
+        </div>
+
+         @if(this.reported)
+         {
+           <div class="mt-4 pt-3 border-top">
+<h6 class="fw-bold mb-3">
+  <i class="bi bi-chat-text me-2"></i>
+  Report raison
+</h6>
+<!--add report reason input here -->
+<div class="mb-4"> 
+  <div class="d-flex gap-2"> 
+    <textarea 
+    class="form-control" 
+    rows="2" 
+    placeholder="Write a report reason..." 
+    [(ngModel)]="reportReason"></textarea> 
+    <button class="btn btn-primary" (click)="reportPost()"> 
+      <i class="bi bi-send"></i> 
+    </button> 
+  </div> 
+</div> </div>
+
+         }@else {
+        <div class="mt-4 pt-3 border-top">
+<h6 class="fw-bold mb-3">
+  <i class="bi bi-chat-text me-2"></i>
+  Comments ({{post.comments?.length || 0}})
+</h6>
+
+          <div class="mb-4">
+            <div class="d-flex gap-2">
+              <textarea 
+                class="form-control" 
+                rows="2" 
+                placeholder="Write a comment..."
+                [(ngModel)]="newComment"></textarea>
+              <button class="btn btn-primary" (click)="addComment()">
+              <i class="bi bi-send"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="comments-list">
+            @if(post.comments && post.comments.length > 0) {
+              <div class="list-group">
+                @for(comment of post.comments; track $index) {
+                  <div class="list-group-item border-0">
+                    <div class="d-flex">
+                      <!-- Clickable Commenter Avatar -->
+                      <div class="flex-shrink-0">
+                        <a [routerLink]="['/profile', comment.creator]" class="text-decoration-none">
+                          <img [src]="comment.avatarurl || 'assets/default-avatar.png'" 
+                               alt="{{comment.creator}}"
+                               class="rounded-circle"
+                               width="40"
+                               height="40"
+                               style="cursor: pointer;">
+                        </a>
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <div class="d-flex justify-content-between">
+                          <!-- Clickable Commenter Username -->
+                          <a [routerLink]="['/profile', comment.creator]" class="text-decoration-none">
+                            <strong class="text-dark">{{comment.creator}}</strong>
+                          </a>
+                          <small class="text-muted">
+                            {{comment.date | date:'short'}}
+                          </small>
+                        </div>
+                        <p class="mb-1">{{comment.content}}</p>
+                        <div>
+                          <button class="btn btn-sm btn-link p-0 me-2" (click)="likeComment(comment)">
+                            <i class="bi bi-heart"></i>{{comment.likes || 0}}
+                          </button>
+                          <button class="btn btn-sm btn-link p-0 me-2" (click)="dislikeComment(comment)">
+                            <i class="bi bi-hand-thumbs-down"></i> {{comment.dislikes || 0}}
+                          </button>
+                          @if( this.currentUser !== comment.creator) {
+                          <button class="btn btn-sm btn-link p-0 me-2" (click)="reportComment(comment)">
+                            <i class="bi bi-flag"></i> Report
+                          </button>
+                          }
+                          @if(comment.creator === this.currentUser) {
+                          <button class="btn btn-sm btn-link p-0 me-2" (click)="deleteComment(comment)">
+                            <i class="bi bi-trash"></i> Delete
+                          </button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4 text-muted">
+                <i class="bi bi-chat-dots display-6 mb-3"></i>
+                <p class="mb-0">No comments yet. Be the first to comment!</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      </div>
+    </div>
+  }
+</div>

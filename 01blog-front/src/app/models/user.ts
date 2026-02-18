@@ -4,11 +4,14 @@ export interface User {
   username: string;
   firstName: string;
   lastName: string;
+  // displayname: string;
   createdAt: string;
   avatarUrl?: string;
   bio?: string;
-  followers: Map<string, string>;     //services 
-  following: Map<string, string>;
+  password?: string;
+  followers: User[];     //services 
+  following: User[];
   followersCount: number;
   followingCount: number;
+  postsCount: number;
 }

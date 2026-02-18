@@ -1,11 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // ← ADD THIS
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/login-request';
 import { NavbarComponent } from '../navbar/navbar';
-import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -18,14 +17,24 @@ export class LoginComponent {
 
   loginRequest: LoginRequest = {
     username: '',
-    password: ''
+    password: '',
   };
   
 
   errorMessage: string = '';
   isLoading: boolean = false;
+
+
   
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    // if (this.authService.isLoggedIn()) {
+    //   // this.router.navigate(['/home']);
+    // }
+  }
+
+  // private navbarcom = inject(NavbarComponent); reje3ha service component standalone hna w f auth service
   
   onSubmit(): void {
     this.isLoading = true;
@@ -36,16 +45,32 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading = false;
         this.router.navigate(['/home']);
-        // this.navbarcom.ngOnInit();
-        // this.log.set(true);
-        // this.authService.
+        // this.navbarcom.updateLogin(true);
       },
-      error: (error) => {
+      error: () => {
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Login failed. Please check your credentials.';
+        this.errorMessage = 'Login failed. Please check your credentials.';
       }
     });
       
 
   }
+  ngAfterViewInit() {
+  // Password visibility toggle
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+  
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      const icon = togglePassword.querySelector('i');
+      if (icon) {
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+      }
+    });
+  }
+}
 }

@@ -1,113 +1,460 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="text-center">Registration With 01BlOg</h3>
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
+  <div class="row w-100 justify-content-center align-items-center">
+    <!-- Left Side - Registration Form -->
+    <div class="col-lg-5 col-xl-4">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+        <!-- Form Header -->
+        <div class="card-header bg-white border-0 pb-0 pt-4">
+          <div class="text-center mb-1">
+            <div class="d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-success bg-opacity-10 mb-3">
+              <i class="bi bi-person-plus-fill text-success fs-2"></i>
+            </div>
+            <h2 class="fw-bold text-dark mb-2">Join 01Blog Community</h2>
+            <p class="text-secondary mb-0">Start your writing journey today</p>
+          </div>
         </div>
-        <div class="card-body">
+        
+        <div class="px-4 mb-4">
+          <div class="d-flex justify-content-between align-items-center position-relative">
+            <!-- <div class="step-indicator active">
+              <span class="step-number">1</span>
+              <span class="step-label d-none d-md-block">create Account</span>
+            </div> -->
+            <div class="step-line"></div>
+            <div class="step-indicator">
+              <span class="step-number">1</span>
+              <span class="step-label d-none d-md-block">Create Account</span>
+            </div>
+            <div class="step-line"></div>
+            <!-- <div class="step-indicator">
+              <span class="step-number">3</span>
+              <span class="step-label d-none d-md-block">Complete</span>
+            </div> -->
+          </div>
+        </div>
+        
+        <div class="card-body p-4 p-md-5">
           @if(errorMessage){
-          <div class="alert alert-danger">
-            {{ errorMessage }}
+          <div class="alert alert-danger d-flex align-items-center rounded-3 mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-3 fs-5"></i>
+            <div>{{ errorMessage }}</div>
           </div>
           }
-          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-            <div class="mb-3">
-              <label for="firstName" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="firstName" 
-                     [(ngModel)]="registerRequest.firstName" name="firstName" 
-                     required #firstName="ngModel">
-              @if(firstName.invalid && firstName.touched){
-              <div class="text-danger">
-                First name is required
+          
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm" novalidate>
+            <div class="mb-4">
+              <h6 class="text-primary mb-3 d-flex align-items-center">
+                <i class="bi bi-person-badge me-2"></i>
+                Personal Information
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="firstName"
+                           placeholder="First Name"
+                           [(ngModel)]="registerRequest.firstName" 
+                           name="firstName" 
+                           required
+                           #firstName="ngModel"
+                           [class.is-invalid]="firstName.invalid && firstName.touched">
+                    <label for="firstName">First Name *</label>
+                    @if(firstName.invalid && firstName.touched){
+                    <div class="invalid-feedback d-flex align-items-center mt-1">
+                      <i class="bi bi-x-circle-fill me-1"></i>
+                      Please enter your first name
+                    </div>
+                    }
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="lastName"
+                           placeholder="Last Name"
+                           [(ngModel)]="registerRequest.lastName" 
+                           name="lastName" 
+                           required
+                           #lastName="ngModel"
+                           [class.is-invalid]="lastName.invalid && lastName.touched">
+                    <label for="lastName">Last Name *</label>
+                    @if(lastName.invalid && lastName.touched){
+                    <div class="invalid-feedback d-flex align-items-center mt-1">
+                      <i class="bi bi-x-circle-fill me-1"></i>
+                      Please enter your last name
+                    </div>
+                    }
+                  </div>
+                </div>
               </div>
-            }
             </div>
             
-            <div class="mb-3">
-              <label for="lastName" class="form-label">Last Name</label>
-              <input type="text" class="form-control" id="lastName" 
-                     [(ngModel)]="registerRequest.lastName" name="lastName" 
-                     required #lastName="ngModel">
-              @if(lastName.invalid && lastName.touched){
-              <div class="text-danger">
-                Last name is required
+            <div class="mb-4">
+              <h6 class="text-primary mb-3 d-flex align-items-center">
+                <i class="bi bi-envelope me-2"></i>
+                Account Information
+              </h6>
+              
+              <div class="form-floating mb-3">
+                <input type="email" 
+                       class="form-control" 
+                       id="email"
+                       placeholder="Email Address"
+                       [(ngModel)]="registerRequest.email" 
+                       name="email" 
+                       required
+                       email
+                       #email="ngModel"
+                       [class.is-invalid]="email.invalid && email.touched">
+                <label for="email">Email Address *</label>
+                @if(email.invalid && email.touched){
+                <div class="invalid-feedback d-flex align-items-center mt-1">
+                  <i class="bi bi-x-circle-fill me-1"></i>
+                  Please enter a valid email address
+                </div>
+                }
               </div>
-            }
+              
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" 
-                     [(ngModel)]="registerRequest.email" name="email" 
-                     required email #email="ngModel">
-              @if(email.invalid && email.touched){
-              <div class="text-danger">
-                Valid email is required
+            
+            <div class="mb-4">
+              <h6 class="text-primary mb-3 d-flex align-items-center">
+                <i class="bi bi-person-circle me-2"></i>
+                Profile Settings
+              </h6>
+              
+              <div class="form-floating mb-3">
+                <input type="text" 
+                       class="form-control" 
+                       id="username"
+                       placeholder="Username"
+                       [(ngModel)]="registerRequest.username" 
+                       name="username" 
+                       required
+                       minlength="3"
+                       #username="ngModel"
+                       [class.is-invalid]="username.invalid && username.touched">
+                <label for="username">Username *</label>
+                @if(username.invalid && username.touched){
+                <div class="invalid-feedback d-flex align-items-center mt-1">
+                  <i class="bi bi-x-circle-fill me-1"></i>
+                  Username must be at least 3 characters
+                </div>
+                }
+                <div class="form-text text-muted small mt-1">
+                  <i class="bi bi-info-circle me-1"></i>
+                  This will be your unique identifier
+                </div>
               </div>
-              }
+              
             </div>
-            <div class="mb-3">
-              <label for="dateOfBirth" class="form-label">Date of Birth</label>
-              <input type="date" class="form-control" id="dateOfBirth" 
-                     [(ngModel)]="registerRequest.dateOfBirth" name="dateOfBirth"
-                      [defaultValue]="" #dateOfBirth="ngModel">
-            </div>
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" 
-                     [(ngModel)]="registerRequest.username" name="username" 
-                     required minlength="3" #username="ngModel">
-            @if(username.invalid && username.touched){
-              <div class="text-danger">
-                Username must be at least 3 characters
+            
+            <div class="mb-4">
+              <h6 class="text-primary mb-3 d-flex align-items-center">
+                <i class="bi bi-shield-lock me-2"></i>
+                Security
+              </h6>
+              
+              <div class="form-floating mb-3">
+                  <input type="password" 
+                         class="form-control" 
+                         id="password"
+                         placeholder="Password"
+                         [(ngModel)]="registerRequest.password" 
+                         name="password" 
+                         required
+                         minlength="8"
+                         #password="ngModel"
+                         [class.is-invalid]="password.invalid && password.touched">
+                         <label for="password">Password *</label>
+                  <!-- <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <i class="bi bi-eye"></i>
+                  </button> -->
+                  
+                <!-- </div> -->
+                @if(password.invalid && password.touched){
+                <div class="invalid-feedback d-flex align-items-center mt-1">
+                  <i class="bi bi-x-circle-fill me-1"></i>
+                  Password must be at least 8 characters
+                </div>
+                }
+                <div class="password-strength mt-2">
+                  
+                  <!-- <div class="progress" style="height: 4px;">
+                    @if(password.value.length >= 8 && /[A-Z]/.test(password.value) && /[0-9]/.test(password.value) && /[!@#$%^&*(),.?":{}|]/.test(password.value)) {
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    } @else if(password.value.length >= 6) {
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 50%"></div>
+                    } @else if(password.value.length > 0) { 
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 25%"></div>
+                    } @else {
+                      <div class="progress-bar bg-light" role="progressbar" style="width: 0%"></div>
+                    }
+                  </div> -->
+                  <div class="form-text text-muted small mt-1">
+                    <i class="bi bi-lightbulb me-1"></i>
+                    Use at least 8 characters with a mix of letters, numbers & symbols
+                  </div>
+                </div>
               </div>
-            }
             </div>
-            <div class="mb-3">
-              <label for="display_name" class="form-label">Display Name</label>
-              <input type="text" class="form-control" id="display_name" 
-                     [(ngModel)]="registerRequest.display_name" name="display_name" 
-                     required minlength="3" #display_name="ngModel">
-            @if(display_name.invalid && display_name.touched){
-              <div class="text-danger">
-                Display Name must be at least 3 characters
+            
+            <div class="mb-4">
+              <h6 class="text-primary mb-3 d-flex align-items-center">
+                <i class="bi bi-image me-2"></i>
+                Profile Customization
+              </h6>
+              
+<div class="mb-3">
+  <label class="form-label fw-semibold text-dark">
+    <i class="bi bi-camera me-2"></i>
+    Profile Picture
+  </label>
+  <div class="avatar-upload-container text-center p-4 border rounded-3">
+    <div class="avatar-preview mb-3 position-relative">
+      <div class="avatar-placeholder rounded-circle bg-light d-inline-flex align-items-center justify-content-center overflow-hidden" 
+           style="width: 100px; height: 100px; border: 2px dashed #dee2e6;">
+      </div>
+      
+      @if(isUploadingAvatar) {
+        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded-circle">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+        </div>
+      }
+    </div>
+    
+    @if(isUploadingAvatar) {
+      <div class="mb-2">
+        <small class="text-primary d-flex align-items-center justify-content-center">
+          <i class="bi bi-cloud-arrow-up me-1"></i>Uploading
+        </small>
+      </div>
+    }
+    
+    @if(uploadedAvatarUrl && !isUploadingAvatar) {
+      <div class="mb-2">
+        <small class="text-success d-flex align-items-center justify-content-center">
+          <i class="bi bi-cloud-check-fill me-1"></i>Uploaded Successfully
+        </small>
+      </div>
+    }
+    
+    <div class="d-flex justify-content-center gap-2">
+      <button type="button" 
+              class="btn btn-outline-primary btn-sm"
+              [class.disabled]="isUploadingAvatar"
+              [attr.disabled]="isUploadingAvatar ? 'disabled' : null"
+              (click)="fileInput.click()">
+        <i class="bi bi-upload me-2"></i>
+        @if(isUploadingAvatar) {
+          <span>Uploading...</span>
+        } @else {
+          <span>Choose Image</span>
+        }
+      </button>
+      
+      <!-- Hidden File Input -->
+      <input #fileInput 
+             type="file" 
+             class="d-none" 
+             (change)="onFileSelected($event)" 
+             accept="image/*">
+      
+      <!-- Upload to Cloud Button (only shown when file selected but not uploaded) -->
+      <!-- @if(avatarFile && !uploadedAvatarUrl && !isUploadingAvatar) {
+        <button type="button" 
+                class="btn btn-sm btn-outline-success"
+                (click)="uploadAvatarToCloudinary(avatarFile)">
+          <i class="bi bi-cloud-arrow-up me-1"></i>Upload to Cloud
+        </button>
+      }
+      
+      @if(avatarFile && !uploadedAvatarUrl && !isUploadingAvatar && uploadFailed) {
+        <button type="button" 
+                class="btn btn-sm btn-outline-warning"
+                (click)="uploadAvatarToCloudinary(avatarFile)">
+          <i class="bi bi-arrow-clockwise me-1"></i>Retry
+        </button>
+      } -->
+    </div>
+    
+    <!-- File Info -->
+    @if(avatarFile) {
+      <div class="mt-2">
+        <small class="text-muted d-block">
+          <i class="bi bi-file-earmark-image me-1"></i>
+          {{ avatarFile.name }}
+        </small>
+        <small class="text-muted">
+          <i class="bi bi-hdd me-1"></i>
+          {{ formatFileSize(avatarFile.size) }}
+        </small>
+      </div>
+    }
+    
+    <div class="form-text text-muted small mt-2">
+      <i class="bi bi-info-circle me-1"></i>
+      JPG, PNG, or GIF. Max 5MB. We'll optimize it for you.
+    </div>
+  </div>
+</div>
+
+                <!-- <div class="avatar-upload-container text-center p-4 border rounded-3">
+                  <div class="avatar-preview mb-3">
+                    <div class="avatar-placeholder rounded-circle bg-light d-inline-flex align-items-center justify-content-center" 
+                         style="width: 100px; height: 100px; border: 2px dashed #dee2e6;">
+                      <i class="bi bi-person fs-1 text-muted"></i>
+                    </div>
+                  </div>
+                  <label for="avatarUpload" class="btn btn-outline-primary btn-sm cursor-pointer">
+                    <i class="bi bi-upload me-2"></i>
+                    Choose Image
+                  </label>
+                  <input type="file" 
+                         class="d-none" 
+                         id="avatarUpload"
+                         (change)="onFileSelected($event)" 
+                         accept="image/*" 
+                         name="avatarUpload">
+                  <div class="form-text text-muted small mt-2">
+                    JPG, PNG, or GIF. Max 5MB.
+                  </div>
+                </div> -->
               </div>
-            }
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" 
-                     [(ngModel)]="registerRequest.password" name="password" 
-                     required minlength="6" #password="ngModel">
-              @if(password.invalid && password.touched){
-              <div class="text-danger">
-                Password must be at least 6 characters
+              
+              <div class="form-floating mb-3">
+                <textarea class="form-control" 
+                          id="bio"
+                          placeholder="Tell us about yourself"
+                          style="height: 100px"
+                          [(ngModel)]="registerRequest.bio" 
+                          name="bio"
+                          #bio="ngModel"
+                          maxlength="250"></textarea>
+                <label for="bio">
+                  <i class="bi bi-chat-text me-2"></i>
+                  Bio (Optional)
+                </label>
+                <div class="form-text text-muted small mt-1">
+                  <i class="bi bi-pencil me-1"></i>
+                  Tell the community about yourself (max 250 characters)
+                </div>
               </div>
-            }
-            </div>
-            <div class="mb-3">
-              <label for="avatarUpload" class="form-label">Upload Avatar</label>
-              <input type="file" class="form-control" id="avatarUpload" 
-                     (change)="onFileSelected($event)" accept="image/*" name="avatarUpload">
-              <small class="form-text text-muted">Select an image file for your avatar</small>
-            </div>
-            <div class="mb-3">
-              <label for="bio" class="form-label">Bio(about you)</label>
-              <textarea class="form-control" id="bio" rows="3"
-                        [(ngModel)]="registerRequest.bio" name="bio"
-                        [defaultValue]="" #bio="ngModel"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100" 
-                    [disabled]="registerForm.invalid || isLoading">
+            <!-- </div> -->
+            
+            <!-- Terms & Conditions -->
+            <!-- <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" 
+                       type="checkbox" 
+                       id="terms"
+                       required
+                       #terms="ngModel"
+                       [(ngModel)]="agreeTerms"
+                       name="terms">
+                <label class="form-check-label text-secondary" for="terms">
+                  I agree to the 
+                  <a href="#" class="text-decoration-none text-primary">Terms of Service</a> 
+                  and 
+                  <a href="#" class="text-decoration-none text-primary">Privacy Policy</a>
+                </label>
+                @if(terms.invalid && terms.touched){
+                <div class="text-danger small d-flex align-items-center mt-1">
+                  <i class="bi bi-x-circle-fill me-1"></i>
+                  You must agree to the terms
+                </div>
+                }
+              </div>
+            </div> -->
+            
+            <!-- Submit Button -->
+             <!--isloadin !agreeterms-->
+            <button type="submit" 
+                    class="btn btn-success btn-lg w-100 rounded-pill py-3 mb-4"
+                    [disabled]="registerForm.invalid || isLoading "
+                    [class.disabled]="registerForm.invalid || isLoading ">
               @if(isLoading){
-              <span class="spinner-border spinner-border-sm me-2"></span>
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <span>Creating Account...</span>
+              } @else {
+              <i class="bi bi-person-plus me-2"></i>
+              <span>Create Account</span>
               }
-              {{ isLoading ? 'Creating Account...' : 'Register' }}
             </button>
           </form>
           
-          <div class="text-center mt-3">
-            <p>Already have an account? <a routerLink="/login">Login here</a></p>
+          <div class="text-center pt-3 border-top">
+            <p class="text-secondary mb-2">Already have an account?</p>
+            <a routerLink="/login" class="btn btn-outline-primary rounded-pill px-4">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Sign In Instead
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-5 col-xl-5 d-none d-lg-block ps-lg-5">
+      <div class="sticky-top" style="top: 2rem;">
+        <div class="d-flex align-items-center mb-5">
+          <img src="./lol.png" alt="01Blog Logo" class="me-3" style="height: 50px; width: auto;">
+          <div>
+            <!-- <h1 class="display-6 fw-bold text-dark mb-0">01Blog</h1> -->
+            <p class="text-primary mb-0">Professional Publishing Platform</p>
+          </div>
+        </div>
+        
+        <h3 class="fw-bold text-dark mb-4">Why Join 01Blog?</h3>
+        
+        <div class="benefits-list">
+          <div class="benefit-item d-flex align-items-start mb-4">
+            <div class="benefit-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3">
+              <i class="bi bi-pencil-square fs-4"></i>
+            </div>
+            <div>
+              <h5 class="fw-semibold text-dark mb-1">Powerful Publishing Tools</h5>
+              <p class="text-secondary mb-0">Rich text editor with markdown support, scheduling, and analytics.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item d-flex align-items-start mb-4">
+            <div class="benefit-icon bg-success bg-opacity-10 text-success rounded-circle p-3 me-3">
+              <i class="bi bi-people fs-4"></i>
+            </div>
+            <div>
+              <h5 class="fw-semibold text-dark mb-1">Engaged Community</h5>
+              <p class="text-secondary mb-0">Connect with readers and writers who share your interests.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item d-flex align-items-start mb-4">
+            <div class="benefit-icon bg-warning bg-opacity-10 text-warning rounded-circle p-3 me-3">
+              <i class="bi bi-bar-chart fs-4"></i>
+            </div>
+            <div>
+              <h5 class="fw-semibold text-dark mb-1">Growth Analytics</h5>
+              <p class="text-secondary mb-0">Track your readership and optimize your content strategy.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item d-flex align-items-start">
+            <div class="benefit-icon bg-info bg-opacity-10 text-info rounded-circle p-3 me-3">
+              <i class="bi bi-shield-check fs-4"></i>
+            </div>
+            <div>
+              <h5 class="fw-semibold text-dark mb-1">Secure & Reliable</h5>
+              <p class="text-secondary mb-0">Your data is protected with enterprise-grade security.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5">
+          <p class="text-secondary mb-3"><small>TRUSTED BY</small></p>
+          <div class="d-flex align-items-center gap-3">
+            <div class="trust-badge p-2 bg-white rounded-3 shadow-sm">
+              <i class="bi bi-shield-check text-success fs-4">01T</i>
+            </div>
           </div>
         </div>
       </div>
