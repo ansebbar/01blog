@@ -55,10 +55,8 @@ export class PostCreateComponent implements OnInit {
   }
   
   ngOnInit() {
-    // You can add initialization logic here
   }
   
-  // ========== GETTER METHODS FOR TEMPLATE ==========
   
   get uploadingFilesCount(): number {
     return Object.keys(this.uploadingFiles).length;
@@ -80,7 +78,6 @@ export class PostCreateComponent implements OnInit {
     return this.mediaPreviews.length;
   }
   
-  // ========== CONTENT EDITOR METHODS ==========
   
   insertImage(): void {
     const imageUrl = prompt('Enter image URL (or leave empty to upload):');
@@ -156,7 +153,7 @@ formatText(command: string, event?: MouseEvent): void {
       formattedText = `*${selectedText}*`;
       break;
     case 'underline':
-      formattedText = `<u>${selectedText}</u>`; // Keep as HTML since markdown doesn't have underline
+      formattedText = `<u>${selectedText}</u>`; 
       break;
     case 'h1':
       formattedText = `# ${selectedText}`;
@@ -168,7 +165,6 @@ formatText(command: string, event?: MouseEvent): void {
       formattedText = `### ${selectedText}`;
       break;
     case 'ul':
-      // For lists, we need to handle multiple lines
       if (selectedText.includes('\n')) {
         const lines = selectedText.split('\n');
         formattedText = lines.map(line => line.trim() ? `- ${line}` : '').join('\n');
@@ -177,7 +173,6 @@ formatText(command: string, event?: MouseEvent): void {
       }
       break;
     case 'ol':
-      // For numbered lists
       if (selectedText.includes('\n')) {
         const lines = selectedText.split('\n');
         formattedText = lines.map((line, index) => line.trim() ? `${index + 1}. ${line}` : '').join('\n');
@@ -212,7 +207,6 @@ formatText(command: string, event?: MouseEvent): void {
     const newContent = content.substring(0, start) + text + content.substring(end);
     this.postForm.get('content')?.setValue(newContent);
     
-    // Restore focus and set cursor position
     setTimeout(() => {
       textarea.focus();
       const newPosition = start + text.length;
@@ -224,7 +218,6 @@ formatText(command: string, event?: MouseEvent): void {
     this.editorMode = mode;
   }
   
-  // ========== MEDIA METHODS ==========
   
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -243,7 +236,7 @@ formatText(command: string, event?: MouseEvent): void {
   }
   
   isValidFile(file: File): boolean {
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024; 
     const allowedTypes = [
       'image/jpeg', 
       'image/jpg',
@@ -268,24 +261,21 @@ formatText(command: string, event?: MouseEvent): void {
     const fileId = `${Date.now()}_${file.name}`;
     this.uploadingFiles[fileId] = true;
     
-    // Create local preview first
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const previewUrl = e.target.result;
       
-      // Add to media previews with temp URL
       const mediaPreview: MediaPreview = {
         id: Date.now(),
         url: previewUrl,
         file: file,
         type: file.type.startsWith('image/') ? 'image' : 'video',
-        caption: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+        caption: file.name.replace(/\.[^/.]+$/, ""), 
         cloudinaryData: undefined
       };
       
       this.mediaPreviews.push(mediaPreview);
       
-      // Start Cloudinary upload
       const folder = `blog/posts/${new Date().getFullYear()}/${new Date().getMonth() + 1}`;
       
       this.uploadService.uploadFile(file, folder).subscribe({
@@ -293,14 +283,12 @@ formatText(command: string, event?: MouseEvent): void {
           delete this.uploadingFiles[fileId];
           delete this.uploadErrors[fileId];
           
-          // Update media preview with Cloudinary data
           const index = this.mediaPreviews.findIndex(m => m.file === file);
           if (index !== -1) {
             this.mediaPreviews[index].cloudinaryData = response;
             this.mediaPreviews[index].url = response.thumbnailUrl || response.url;
           }
           
-          // Insert markdown into editor
           if (file.type.startsWith('image/')) {
   this.insertAtCursor(`\n![${file.name}](${response.url})\n`);
 } else if (file.type.startsWith('video/')) {
@@ -318,7 +306,6 @@ formatText(command: string, event?: MouseEvent): void {
           delete this.uploadingFiles[fileId];
           this.uploadErrors[fileId] = `Failed to upload: ${error.message || 'Unknown error'}`;
           
-          // Remove failed upload from previews
           this.mediaPreviews = this.mediaPreviews.filter(m => m.file !== file);
           
           this.showToast(`Failed to upload ${file.name}`, 'error');
@@ -339,7 +326,6 @@ formatText(command: string, event?: MouseEvent): void {
     const media = this.mediaPreviews.find(m => m.id === id);
     
     if (media) {
-      // If uploaded to Cloudinary, delete it
       if (media.cloudinaryData?.publicId) {
         this.uploadService.deleteFile(media.cloudinaryData.publicId).subscribe({
           next: () => {
@@ -351,12 +337,10 @@ formatText(command: string, event?: MouseEvent): void {
         });
       }
       
-      // Remove from local array
       this.mediaPreviews = this.mediaPreviews.filter(m => m.id !== id);
     }
   }
   
-  // ========== FORM SUBMISSION ==========
   
 async onSubmit(event?: Event): Promise<void> {
     if (event) event.preventDefault();
@@ -432,10 +416,7 @@ async onSubmit(event?: Event): Promise<void> {
       this.router.navigate(['/home']);
     }
   }
-  
-  // ========== HELPER METHODS ==========
-  
-// Simple markdown renderer for preview
+
 renderMarkdown(text: string): SafeHtml {
   if (!text || text.trim() === '') {
     return this.sanitizer.bypassSecurityTrustHtml('');
@@ -475,18 +456,14 @@ renderMarkdown(text: string): SafeHtml {
     '</video>' +
     '</div>');
   
-  // Lists
   html = html.replace(/^\s*[-*+]\s+(.*)/gim, '<li>$1</li>');
   html = html.replace(/^\s*\d+\.\s+(.*)/gim, '<li>$1</li>');
   html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul class="mb-3">$&</ul>');
   
-  // Blockquotes
   html = html.replace(/^>\s*(.*$)/gim, '<blockquote class="border-start ps-3 my-3">$1</blockquote>');
   
-  // Horizontal rules
   html = html.replace(/^---$/gim, '<hr class="my-3">');
   
-  // Convert line breaks to paragraphs
   const lines = html.split('\n');
   let result = '';
   let currentParagraph = '';
@@ -498,7 +475,6 @@ renderMarkdown(text: string): SafeHtml {
         currentParagraph = '';
       }
     } else {
-      // Skip if line already starts with HTML tag
       if (line.startsWith('<h') || 
           line.startsWith('<pre') || 
           line.startsWith('<img') || 

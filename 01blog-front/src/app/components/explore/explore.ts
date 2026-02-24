@@ -64,8 +64,8 @@ interface User {
   selector: 'app-explore',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './explore.component.html',
-  styleUrls: ['./explore.component.css']
+  templateUrl: './explore.html',
+  styleUrls: ['./explore.css']
 })
 export class ExploreComponent implements OnInit {
   allUsers: User[] = [];
