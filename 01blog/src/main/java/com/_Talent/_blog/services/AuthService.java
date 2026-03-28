@@ -29,6 +29,34 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    public boolean registeradmin() {
+         User user = new User();
+        // user.setEmail(registerRequest.getEmail());
+        user.setUsername("admin");
+        user.setPassword(passwordEncoder.encode("12345678"));
+        user.setEmail("admin@gmail.com");
+        user.setFirstName("admin");
+        user.setLastName("admin");
+        user.setBio("admin");
+        user.setRateadmin("superadmin");
+        
+        // if (registerRequest.getAvatarUrl() != null && !registerRequest.getAvatarUrl().isEmpty()) {
+            // user.setProfilePicture("");
+        // } else {
+            user.setProfilePicture("https://ui-avatars.com/api/?name=" + 
+                user.getFirstName() + "+" + user.getLastName() + "&background=4f46e5&color=fff");
+        // }
+        
+        // Initialize other fields
+        user.setPin(null); // Initialize pin as null
+        user.setToken(null); // Initialize token as null
+        
+        userRepository.save(user);
+        System.out.println("admin registered: " + user.getUsername());
+        return true;
+    }
+
     public AuthResponse register(RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new RuntimeException("Username already exists");

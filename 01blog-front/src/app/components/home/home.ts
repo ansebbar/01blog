@@ -164,7 +164,7 @@ export class HomeComponent implements OnInit {
   }    
 
   admin(): void {
-    // this.router.navigate(['/admin']);
+    this.adashbord = !this.adashbord;
   }
 
   changestrate(id: number,type:string): void {
